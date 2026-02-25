@@ -14,9 +14,6 @@ export default function Navbar() {
                 </Link>
 
                 <div className="flex items-center gap-6">
-                    <Link href="/pricing" className="text-sm font-medium text-[#8a9ab0] hover:text-white transition-colors">
-                        Pricing
-                    </Link>
                     <Link href="/auth/login" className="text-sm font-medium text-[#8a9ab0] hover:text-white transition-colors hidden sm:block">
                         Log In
                     </Link>
