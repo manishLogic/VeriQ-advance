@@ -61,7 +61,7 @@ export default function Hero() {
                         className="h1-scale font-bold text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/60 tracking-tight flex flex-col items-start sm:block"
                     >
                         Hire with
-                        <span className="inline-flex relative overflow-hidden align-bottom h-[1.2em] min-w-[300px] ml-0 mt-2 sm:mt-0 sm:ml-[0.3em]">
+                        <span className="inline-flex relative overflow-hidden align-bottom h-[1.2em] w-[200px] sm:w-[320px] ml-0 mt-2 sm:mt-0 sm:ml-[0.3em]">
                             <AnimatePresence mode="wait">
                                 <motion.span
                                     key={wordIndex}
