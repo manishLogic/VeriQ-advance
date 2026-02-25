@@ -10,21 +10,6 @@ export default function SocialProof() {
 
             <div className="max-w-7xl mx-auto px-6">
 
-                {/* Company Logos */}
-                <div className="text-center mb-16">
-                    <p className="text-xs font-semibold text-[#8a9ab0] uppercase tracking-widest mb-8">
-                        Trusted by Engineering Teams at
-                    </p>
-                    <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                        {/* Placeholder Logos replacing real companies for generic SaaS feel */}
-                        <div className="text-xl font-bold font-sora text-white">Nexus</div>
-                        <div className="text-xl font-bold font-sora text-white">Synapse</div>
-                        <div className="text-xl font-bold font-sora text-white">Quantum</div>
-                        <div className="text-xl font-bold font-sora text-white">Ethos</div>
-                        <div className="text-xl font-bold font-sora text-white hidden sm:block">Vertex</div>
-                    </div>
-                </div>
-
                 {/* Stripe-like Metrics Panel */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
