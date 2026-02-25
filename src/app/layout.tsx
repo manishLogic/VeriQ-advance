@@ -34,9 +34,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${sora.variable} ${inter.variable} bg-navy text-white font-inter antialiased`}
+          className={`${sora.variable} ${inter.variable} bg-background text-foreground font-inter antialiased min-h-screen relative`}
         >
-          <header>
+          {/* Subtle noise overlay applied globally */}
+          <div className="bg-noise" />
+
+          <header className="absolute top-0 right-0 p-6 z-50">
             <SignedOut>
               <SignInButton />
               <SignUpButton />

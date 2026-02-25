@@ -1,24 +1,50 @@
 "use client";
+import { useEffect, useState, use } from "react";
 import { ArrowLeft, Download, ShieldCheck, Mail, Calendar, MapPin, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { GlowCard } from "@/components/shared/GlowCard";
 
-export default function CandidateProfile() {
-    const candidate = {
-        name: "David Chen",
-        role: "Senior Frontend Engineer",
-        location: "San Francisco, CA (Remote)",
-        experience: "8 Years",
-        score: 92,
-        match: "Excellent",
-        about: "Senior Frontend Engineer with a proven track record of architecting scalable React applications. Passionate about web performance and accessible UI components.",
-        skills: [
-            { name: "React", score: 98, status: "Passed" },
-            { name: "TypeScript", score: 94, status: "Passed" },
-            { name: "Next.js", score: 88, status: "Passed" },
-            { name: "GraphQL", score: 85, status: "Passed" }
-        ]
-    };
+const DEFAULT_CANDIDATE = {
+    name: "David Chen",
+    role: "Senior Frontend Engineer",
+    location: "San Francisco, CA (Remote)",
+    experience: "8 Years",
+    score: 92,
+    match: "Excellent",
+    about: "Senior Frontend Engineer with a proven track record of architecting scalable React applications. Passionate about web performance and accessible UI components.",
+    skills: [
+        { name: "React", score: 98, status: "Passed" },
+        { name: "TypeScript", score: 94, status: "Passed" },
+        { name: "Next.js", score: 88, status: "Passed" },
+        { name: "GraphQL", score: 85, status: "Passed" }
+    ]
+};
+
+export default function CandidateProfile({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
+    const [candidate, setCandidate] = useState(DEFAULT_CANDIDATE);
+
+    useEffect(() => {
+        const stored = localStorage.getItem("veriq_mock_candidates");
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                const found = parsed.find((p: any) => p.id.toString() === id);
+                if (found) {
+                    setCandidate({
+                        ...DEFAULT_CANDIDATE,
+                        name: found.name,
+                        role: found.role,
+                        score: found.score,
+                        match: found.score > 90 ? "Excellent" : found.score > 80 ? "Strong" : "Average"
+                        // Keep other default data for UI completion
+                    });
+                }
+            } catch (e) {
+                console.error("Error parsing stored candidates", e);
+            }
+        }
+    }, [id]);
 
     // SVG math
     const radius = 60;

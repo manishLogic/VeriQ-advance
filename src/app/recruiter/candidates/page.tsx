@@ -1,22 +1,46 @@
 "use client";
-import { useState } from "react";
-import { Search, Filter, ShieldCheck } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Filter, ShieldCheck, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { GlowCard } from "@/components/shared/GlowCard";
 
-const MOCK_CANDIDATES = [
+const FALLBACK_CANDIDATES = [
     { id: "can_1", name: "David Chen", role: "Senior Frontend Engineer", score: 92, match: "Excellent", skills: ["React", "TypeScript", "Next.js"] },
     { id: "can_2", name: "Sarah Miller", role: "Full Stack Developer", score: 88, match: "Strong", skills: ["Node.js", "Next.js", "PostgreSQL"] },
     { id: "can_3", name: "Michael Chang", role: "React Native Developer", score: 74, match: "Average", skills: ["React Native", "TypeScript", "Redux"] },
     { id: "can_4", name: "Elena Rodriguez", role: "Backend Engineer", score: 95, match: "Excellent", skills: ["Python", "Django", "AWS"] },
-    { id: "can_5", name: "James Wilson", role: "Frontend Developer", score: 58, match: "Poor", skills: ["HTML", "CSS", "JavaScript"] },
-    { id: "can_6", name: "Anita Patel", role: "UI/UX Developer", score: 82, match: "Strong", skills: ["Figma", "React", "Tailwind"] },
 ];
 
 export default function BrowseCandidates() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [candidates, setCandidates] = useState(FALLBACK_CANDIDATES);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const filteredCandidates = MOCK_CANDIDATES.filter(c =>
+    useEffect(() => {
+        // Simulate network delay
+        setTimeout(() => {
+            const stored = localStorage.getItem("veriq_mock_candidates");
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    const mapped = parsed.map((p: any) => ({
+                        id: p.id.toString(),
+                        name: p.name,
+                        role: p.role,
+                        score: p.score,
+                        match: p.score > 90 ? "Excellent" : p.score > 80 ? "Strong" : "Average",
+                        skills: ["React", "TypeScript", "Node.js"]
+                    }));
+                    setCandidates([...mapped, ...FALLBACK_CANDIDATES]);
+                } catch (e) {
+                    console.error("Failed to parse stored candidates", e);
+                }
+            }
+            setIsLoading(false);
+        }, 800);
+    }, []);
+
+    const filteredCandidates = candidates.filter(c =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.skills.some(s => s.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -51,62 +75,84 @@ export default function BrowseCandidates() {
 
             {/* Grid */}
             <div className="grid grid-cols-1 w-full md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredCandidates.map((candidate) => {
-
-                    let scoreColor = "text-green-400 bg-green-400/10 border-green-400/20";
-                    let badgeColor = "bg-green-500";
-                    if (candidate.score < 60) {
-                        scoreColor = "text-red-400 bg-red-400/10 border-red-400/20";
-                        badgeColor = "bg-red-500";
-                    } else if (candidate.score < 80) {
-                        scoreColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
-                        badgeColor = "bg-yellow-500";
-                    }
-
-                    return (
-                        <GlowCard key={candidate.id} className="flex flex-col justify-between h-full p-6">
+                {isLoading ? (
+                    Array.from({ length: 6 }).map((_, i) => (
+                        <div key={i} className="bg-[#0b1120] border border-white/5 rounded-2xl p-6 h-[280px] flex flex-col justify-between animate-pulse">
                             <div>
                                 <div className="flex justify-between items-start mb-4">
-                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center font-sora font-bold text-white text-xl border border-white/10">
-                                        {candidate.name.split(" ").map(n => n[0]).join("")}
-                                    </div>
-                                    <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full border ${scoreColor}`}>
-                                        <span className="font-sora font-bold">{candidate.score}</span>
-                                    </div>
+                                    <div className="w-14 h-14 rounded-full bg-white/5" />
+                                    <div className="w-14 h-14 rounded-full bg-white/5" />
                                 </div>
-
-                                <h3 className="text-xl font-sora font-semibold text-white hover:text-[#00d4d4] transition-colors">
-                                    <Link href={`/recruiter/candidates/${candidate.id}`}>{candidate.name}</Link>
-                                </h3>
-                                <p className="text-sm text-[#8a9ab0] mb-4">{candidate.role}</p>
-
-                                <div className="flex flex-wrap gap-2 mb-6">
-                                    {candidate.skills.slice(0, 3).map(skill => (
-                                        <span key={skill} className="px-2.5 py-1 bg-[#00d4d4]/10 border border-[#00d4d4]/20 text-[#00d4d4] rounded-lg text-xs font-medium">
-                                            {skill}
-                                        </span>
-                                    ))}
-                                    {candidate.skills.length > 3 && (
-                                        <span className="px-2.5 py-1 bg-white/5 text-[#8a9ab0] rounded-lg text-xs font-medium">+{candidate.skills.length - 3}</span>
-                                    )}
+                                <div className="h-6 w-3/4 bg-white/5 rounded-md mb-2" />
+                                <div className="h-4 w-1/2 bg-white/5 rounded-md mb-6" />
+                                <div className="flex gap-2 mb-6">
+                                    <div className="h-6 w-16 bg-white/5 rounded-md" />
+                                    <div className="h-6 w-16 bg-white/5 rounded-md" />
                                 </div>
                             </div>
-
                             <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
-                                <div className="flex items-center gap-1.5 text-xs font-medium text-white">
-                                    <div className={`w-2 h-2 rounded-full ${badgeColor}`} />
-                                    {candidate.match} Match
-                                </div>
-                                <Link href={`/recruiter/candidates/${candidate.id}`} className="text-sm font-semibold text-[#00d4d4] hover:text-[#00e5e5] px-4 py-2 bg-[#00d4d4]/10 rounded-xl transition-colors">
-                                    View Profile
-                                </Link>
+                                <div className="h-4 w-20 bg-white/5 rounded-md" />
+                                <div className="h-8 w-24 bg-white/5 rounded-xl" />
                             </div>
-                        </GlowCard>
-                    );
-                })}
+                        </div>
+                    ))
+                ) : (
+                    filteredCandidates.map((candidate) => {
+                        let scoreColor = "text-green-400 bg-green-400/10 border-green-400/20";
+                        let badgeColor = "bg-green-500";
+                        if (candidate.score < 60) {
+                            scoreColor = "text-red-400 bg-red-400/10 border-red-400/20";
+                            badgeColor = "bg-red-500";
+                        } else if (candidate.score < 80) {
+                            scoreColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+                            badgeColor = "bg-yellow-500";
+                        }
+
+                        return (
+                            <GlowCard key={candidate.id} className="flex flex-col justify-between h-full p-6">
+                                <div>
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center font-sora font-bold text-white text-xl border border-white/10">
+                                            {candidate.name.split(" ").map((n: string) => n[0]).join("")}
+                                        </div>
+                                        <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full border ${scoreColor}`}>
+                                            <span className="font-sora font-bold">{candidate.score}</span>
+                                        </div>
+                                    </div>
+
+                                    <h3 className="text-xl font-sora font-semibold text-white hover:text-[#00d4d4] transition-colors">
+                                        <Link href={`/recruiter/candidates/${candidate.id}`}>{candidate.name}</Link>
+                                    </h3>
+                                    <p className="text-sm text-[#8a9ab0] mb-4">{candidate.role}</p>
+
+                                    <div className="flex flex-wrap gap-2 mb-6">
+                                        {candidate.skills.slice(0, 3).map((skill: string) => (
+                                            <span key={skill} className="px-2.5 py-1 bg-[#00d4d4]/10 border border-[#00d4d4]/20 text-[#00d4d4] rounded-lg text-xs font-medium">
+                                                {skill}
+                                            </span>
+                                        ))}
+                                        {candidate.skills.length > 3 && (
+                                            <span className="px-2.5 py-1 bg-white/5 text-[#8a9ab0] rounded-lg text-xs font-medium">+{candidate.skills.length - 3}</span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
+                                    <div className="flex items-center gap-1.5 text-xs font-medium text-white">
+                                        <div className={`w-2 h-2 rounded-full ${badgeColor}`} />
+                                        {candidate.match} Match
+                                    </div>
+                                    <Link href={`/recruiter/candidates/${candidate.id}`} className="text-sm font-semibold text-[#00d4d4] hover:text-[#00e5e5] px-4 py-2 bg-[#00d4d4]/10 rounded-xl transition-colors">
+                                        View Profile
+                                    </Link>
+                                </div>
+                            </GlowCard>
+                        );
+                    })
+                )}
             </div>
 
-            {filteredCandidates.length === 0 && (
+            {!isLoading && filteredCandidates.length === 0 && (
                 <div className="text-center py-20 bg-[#0d1722] rounded-2xl border border-white/5">
                     <p className="text-[#8a9ab0]">No candidates found matching your criteria.</p>
                 </div>

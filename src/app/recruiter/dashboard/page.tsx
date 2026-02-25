@@ -1,47 +1,17 @@
-import { Users, UserCheck, Clock, ArrowRight } from "lucide-react";
-import { GlowCard } from "@/components/shared/GlowCard";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import DashboardMetrics from "@/components/dashboard/DashboardMetrics";
 
 export default function RecruiterDashboard() {
     return (
         <div className="p-8 md:p-12 max-w-6xl mx-auto space-y-10 animate-in fade-in duration-500">
-            <header className="space-y-2">
-                <h1 className="text-3xl font-sora font-bold text-white">Acme Corp Pipeline</h1>
-                <p className="text-[#8a9ab0]">Overview of your currently verified and pending candidates.</p>
+            <header className="space-y-2 relative">
+                <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#00d4d4]/10 rounded-full blur-[50px] pointer-events-none" />
+                <h1 className="text-3xl font-sora font-bold text-white relative z-10">Acme Corp Pipeline</h1>
+                <p className="text-[#8a9ab0] relative z-10">Overview of your currently verified and pending candidates.</p>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <GlowCard className="flex flex-col justify-between" active>
-                    <div className="p-3 bg-white/5 rounded-xl text-[#00d4d4] w-max mb-4 border border-[#00d4d4]/20">
-                        <UserCheck size={24} />
-                    </div>
-                    <div>
-                        <h3 className="text-[#8a9ab0] font-medium mb-1">Verified Candidates</h3>
-                        <div className="text-4xl font-sora font-bold text-white">124</div>
-                    </div>
-                </GlowCard>
-
-                <GlowCard className="flex flex-col justify-between">
-                    <div className="p-3 bg-white/5 rounded-xl text-white w-max mb-4 border border-white/10">
-                        <Clock size={24} />
-                    </div>
-                    <div>
-                        <h3 className="text-[#8a9ab0] font-medium mb-1">Pending Reviews</h3>
-                        <div className="text-4xl font-sora font-bold text-white">18</div>
-                    </div>
-                </GlowCard>
-
-                <GlowCard className="flex flex-col justify-between">
-                    <div className="p-3 bg-white/5 rounded-xl text-white w-max mb-4 border border-white/10">
-                        <Users size={24} />
-                    </div>
-                    <div>
-                        <h3 className="text-[#8a9ab0] font-medium mb-1">Total Pipeline</h3>
-                        <div className="text-4xl font-sora font-bold text-white">402</div>
-                    </div>
-                </GlowCard>
-            </div>
+            <DashboardMetrics />
 
             <div className="space-y-6">
                 <div className="flex items-center justify-between">

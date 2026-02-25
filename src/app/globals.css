@@ -3,27 +3,110 @@
 @theme {
   --color-cyan: #00d4d4;
   --color-cyan-light: #00e5e5;
-  --color-navy: #070d14;
-  --color-navy-card: #0d1722;
+  --color-cyan-DEFAULT: #00d4d4;
+  --color-navy: #030712;
+  --color-navy-card: #0b1120;
+  --color-navy-card-hover: #111827;
+
   --font-sora: var(--font-sora), sans-serif;
   --font-inter: var(--font-inter), sans-serif;
+
   --shadow-cyan: 0 0 40px rgba(0, 212, 212, 0.25);
   --shadow-cyan-lg: 0 0 60px rgba(0, 212, 212, 0.4);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  --radius-2xl: 16px;
+  --radius-xl: 12px;
+  --radius-lg: 8px;
 }
 
 :root {
-  --background: #070d14;
-  --foreground: #ffffff;
+  --background: #030712;
+  --foreground: #f8fafc;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter);
+  /* Fallback subtle dark gradient */
+  background-image: radial-gradient(circle at top center, #0b1120, #030712);
+  background-attachment: fixed;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Subtle Noise Texture overlay */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+  }
+
+  /* Soft Glassmorphism Panel styles */
+  .glass-panel {
+    background: rgba(11, 17, 32, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-panel-hover {
+    transition: all 0.3s ease;
+  }
+
+  .glass-panel-hover:hover {
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(0, 212, 212, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 212, 212, 0.1);
+  }
+
+  /* Gradient text utility */
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #ffffff, #8a9ab0);
+  }
+
+  .text-gradient-cyan {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #00d4d4, #0088cc);
+  }
+
+  /* Typography Scale Overrides */
+  .h1-scale {
+    font-size: clamp(3rem, 5vw, 4rem);
+    /* 48-64px */
+    line-height: 1.1;
+    font-family: var(--font-sora);
+  }
+
+  .h2-scale {
+    font-size: 2rem;
+    /* 32px */
+    line-height: 1.2;
+    font-family: var(--font-sora);
+  }
+
+  .body-scale {
+    font-size: 1rem;
+    /* 16px */
+    line-height: 1.5;
+  }
+
+  .muted-scale {
+    font-size: 0.875rem;
+    /* 14px */
+    color: #8a9ab0;
   }
 }
