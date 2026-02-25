@@ -7,8 +7,9 @@ export default function Features() {
 
     return (
         <section className="py-24 bg-background relative border-y border-white/5 overflow-hidden">
-            {/* Background lighting */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[400px] bg-[#00d4d4]/5 blur-[120px] pointer-events-none rounded-full" />
+            {/* Background lighting (Optimized for performance) */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[400px] pointer-events-none rounded-full"
+                style={{ background: 'radial-gradient(ellipse at center, rgba(0,212,212,0.05) 0%, rgba(0,212,212,0) 70%)' }} />
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-20 space-y-4">
@@ -85,7 +86,8 @@ export default function Features() {
                         transition={{ delay: 0.1 }}
                         className="glass-panel glass-panel-hover rounded-[24px] p-8 relative overflow-hidden group flex flex-col h-full ring-1 ring-[#00d4d4]/20 shadow-[0_0_40px_rgba(0,212,212,0.05)]"
                     >
-                        <div className="absolute top-0 right-0 w-40 h-40 bg-[#00d4d4]/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-[#00d4d4]/20 transition-all" />
+                        <div className="absolute top-0 right-0 w-40 h-40 pointer-events-none group-hover:opacity-75 transition-opacity duration-500"
+                            style={{ background: 'radial-gradient(circle, rgba(0,212,212,0.15) 0%, rgba(0,212,212,0) 70%)' }} />
 
                         <div className="w-12 h-12 bg-[#00d4d4]/10 rounded-xl flex items-center justify-center mb-6 border border-[#00d4d4]/20">
                             <ShieldCheck className="text-[#00d4d4]" size={24} />

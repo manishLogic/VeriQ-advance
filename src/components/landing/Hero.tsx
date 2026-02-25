@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, ShieldAlert, Timer, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 const WORDS = ["proof", "certainty", "verification", "confidence", "data", "trust"];
 
@@ -33,9 +34,11 @@ export default function Hero() {
 
     return (
         <section className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
-            {/* Background Glows */}
-            <div className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-[#00d4d4]/10 rounded-full blur-[120px] -z-10 pointer-events-none mix-blend-screen" />
-            <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#0088cc]/10 rounded-full blur-[100px] -z-10 pointer-events-none mix-blend-screen" />
+            {/* Background Glows (Optimized for performance) */}
+            <div className="absolute top-1/4 left-0 w-[600px] h-[600px] rounded-full pointer-events-none -z-10"
+                style={{ background: 'radial-gradient(circle, rgba(0,212,212,0.05) 0%, rgba(0,212,212,0) 70%)' }} />
+            <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none -z-10"
+                style={{ background: 'radial-gradient(circle, rgba(0,136,204,0.05) 0%, rgba(0,136,204,0) 70%)' }} />
 
             <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
 
@@ -104,17 +107,17 @@ export default function Hero() {
                         transition={{ duration: 0.5, delay: 0.3 }}
                         className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4"
                     >
-                        <button className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-[#00d4d4] text-[#030712] font-semibold rounded-2xl transition-all hover:bg-[#00e5e5] hover:shadow-[0_0_30px_rgba(0,212,212,0.4)] overflow-hidden">
+                        <Link href="/auth/register" className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-[#00d4d4] text-[#030712] font-semibold rounded-2xl transition-all hover:bg-[#00e5e5] hover:shadow-[0_0_30px_rgba(0,212,212,0.4)] overflow-hidden">
                             <span className="relative z-10 flex items-center gap-2">
                                 Start Free Trial <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </span>
                             {/* Button subtle inner glow */}
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                        </button>
+                        </Link>
 
-                        <button className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/10 text-white font-medium rounded-2xl hover:bg-white/5 hover:border-white/20 transition-all">
+                        <Link href="/recruiter/dashboard" className="flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-transparent border border-white/10 text-white font-medium rounded-2xl hover:bg-white/5 hover:border-white/20 transition-all">
                             View Sample Report
-                        </button>
+                        </Link>
                     </motion.div>
 
                     <motion.div

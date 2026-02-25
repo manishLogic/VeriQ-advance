@@ -116,35 +116,35 @@ export default function RegistrationFlow() {
                                 <button
                                     onClick={() => setRole("recruiter")}
                                     className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 flex items-start gap-4 ${role === "recruiter"
-                                            ? "bg-[#00d4d4]/10 border-[#00d4d4]/40 shadow-[0_0_20px_rgba(0,212,212,0.1)]"
-                                            : "bg-white/5 border-white/5 hover:border-white/20"
+                                        ? "bg-[#00d4d4]/10 border-[#00d4d4]/40 shadow-[0_0_20px_rgba(0,212,212,0.1)]"
+                                        : "bg-white/5 border-white/5 hover:border-white/20"
                                         }`}
                                 >
                                     <div className={`p-3 rounded-xl ${role === 'recruiter' ? 'bg-[#00d4d4]' : 'bg-white/10'} transition-colors`}>
                                         <Building2 size={24} className={role === 'recruiter' ? 'text-[#030712]' : 'text-white'} />
                                     </div>
-                                    <div>
+                                    <div className="flex-1">
                                         <h3 className="font-semibold text-white mb-1">I'm Hiring</h3>
                                         <p className="text-xs text-[#8a9ab0]">Evaluate and verify candidates</p>
                                     </div>
-                                    {role === "recruiter" && <CheckCircle2 className="ml-auto text-[#00d4d4] mt-1" size={20} />}
+                                    <CheckCircle2 className={`text-[#00d4d4] mt-1 transition-opacity duration-300 ${role === "recruiter" ? "opacity-100" : "opacity-0"}`} size={20} />
                                 </button>
 
                                 <button
                                     onClick={() => setRole("candidate")}
                                     className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 flex items-start gap-4 ${role === "candidate"
-                                            ? "bg-[#00d4d4]/10 border-[#00d4d4]/40 shadow-[0_0_20px_rgba(0,212,212,0.1)]"
-                                            : "bg-white/5 border-white/5 hover:border-white/20"
+                                        ? "bg-[#00d4d4]/10 border-[#00d4d4]/40 shadow-[0_0_20px_rgba(0,212,212,0.1)]"
+                                        : "bg-white/5 border-white/5 hover:border-white/20"
                                         }`}
                                 >
                                     <div className={`p-3 rounded-xl ${role === 'candidate' ? 'bg-[#00d4d4]' : 'bg-white/10'} transition-colors`}>
                                         <Briefcase size={24} className={role === 'candidate' ? 'text-[#030712]' : 'text-white'} />
                                     </div>
-                                    <div>
+                                    <div className="flex-1">
                                         <h3 className="font-semibold text-white mb-1">I'm a Candidate</h3>
                                         <p className="text-xs text-[#8a9ab0]">Take tests and verify my skills</p>
                                     </div>
-                                    {role === "candidate" && <CheckCircle2 className="ml-auto text-[#00d4d4] mt-1" size={20} />}
+                                    <CheckCircle2 className={`text-[#00d4d4] mt-1 transition-opacity duration-300 ${role === "candidate" ? "opacity-100" : "opacity-0"}`} size={20} />
                                 </button>
                             </div>
 
@@ -234,8 +234,8 @@ export default function RegistrationFlow() {
                                                 <div
                                                     key={threshold}
                                                     className={`flex-1 rounded-full transition-colors duration-500 ${passwordStrength >= threshold
-                                                            ? passwordStrength > 50 ? 'bg-[#00d4d4]' : 'bg-yellow-400'
-                                                            : 'bg-white/10'
+                                                        ? passwordStrength > 50 ? 'bg-[#00d4d4]' : 'bg-yellow-400'
+                                                        : 'bg-white/10'
                                                         }`}
                                                 />
                                             ))}

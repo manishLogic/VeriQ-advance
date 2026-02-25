@@ -30,7 +30,9 @@ const steps = [
 export default function HowItWorks() {
     return (
         <section className="py-24 relative overflow-hidden bg-[#030712]">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00d4d4]/5 rounded-full blur-[100px] pointer-events-none" />
+            {/* Background lighting (Optimized) */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, rgba(0,212,212,0.05) 0%, rgba(0,212,212,0) 70%)' }} />
 
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-24 space-y-4">
@@ -84,8 +86,8 @@ export default function HowItWorks() {
 
                                 {/* Icon Box */}
                                 <div className={`w-24 h-24 rounded-2xl flex items-center justify-center mb-6 relative z-10 transition-all duration-300 ${step.active
-                                        ? "bg-[#00d4d4]/20 border-2 border-[#00d4d4] shadow-[0_0_30px_rgba(0,212,212,0.3)]"
-                                        : "bg-[#0b1120] border border-white/10 group-hover:border-[#00d4d4]/50 group-hover:shadow-[0_0_20px_rgba(0,212,212,0.1)]"
+                                    ? "bg-[#00d4d4]/20 border-2 border-[#00d4d4] shadow-[0_0_30px_rgba(0,212,212,0.3)]"
+                                    : "bg-[#0b1120] border border-white/10 group-hover:border-[#00d4d4]/50 group-hover:shadow-[0_0_20px_rgba(0,212,212,0.1)]"
                                     }`}>
                                     {step.active && (
                                         <div className="absolute inset-0 rounded-2xl border-2 border-[#00d4d4] animate-ping opacity-20" />
