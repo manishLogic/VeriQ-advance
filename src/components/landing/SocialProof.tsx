@@ -17,11 +17,11 @@ export default function SocialProof() {
                     </p>
                     <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
                         {/* Placeholder Logos replacing real companies for generic SaaS feel */}
-                        <div className="text-xl font-bold font-sora text-white">AcmeCorp</div>
-                        <div className="text-xl font-bold font-sora text-white">Globex</div>
-                        <div className="text-xl font-bold font-sora text-white">Soylent</div>
-                        <div className="text-xl font-bold font-sora text-white">Initech</div>
-                        <div className="text-xl font-bold font-sora text-white hidden sm:block">Umbrella</div>
+                        <div className="text-xl font-bold font-sora text-white">Nexus</div>
+                        <div className="text-xl font-bold font-sora text-white">Synapse</div>
+                        <div className="text-xl font-bold font-sora text-white">Quantum</div>
+                        <div className="text-xl font-bold font-sora text-white">Ethos</div>
+                        <div className="text-xl font-bold font-sora text-white hidden sm:block">Vertex</div>
                     </div>
                 </div>
 

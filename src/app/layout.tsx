@@ -39,15 +39,6 @@ export default function RootLayout({
           {/* Subtle noise overlay applied globally */}
           <div className="bg-noise" />
 
-          <header className="absolute top-0 right-0 p-6 z-50">
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
           {children}
         </body>
       </html>
