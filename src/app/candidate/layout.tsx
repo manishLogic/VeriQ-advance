@@ -8,7 +8,7 @@ export default function CandidateLayout({
     return (
         <div className="min-h-screen bg-[#070d14] flex">
             <Sidebar />
-            <main className="flex-1 ml-[260px]">
+            <main className="flex-1 w-full lg:ml-[260px] mt-16 lg:mt-0">
                 {children}
             </main>
         </div>
