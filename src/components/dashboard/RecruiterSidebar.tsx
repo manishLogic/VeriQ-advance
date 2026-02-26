@@ -1,12 +1,15 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Users, FileBarChart, Settings, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useClerk } from "@clerk/nextjs";
 
 export default function RecruiterSidebar() {
     const pathname = usePathname();
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
+    const { signOut } = useClerk();
 
     const navItems = [
         { href: "/recruiter/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -95,7 +98,7 @@ export default function RecruiterSidebar() {
                             <p className="text-sm font-medium text-white truncate">Sarah Jensen</p>
                             <p className="text-xs text-[#8a9ab0] truncate">Acme Corp</p>
                         </div>
-                        <button className="text-[#8a9ab0] hover:text-red-400 transition-colors">
+                        <button onClick={() => signOut(() => router.push("/"))} className="text-[#8a9ab0] hover:text-red-400 transition-colors">
                             <LogOut size={18} />
                         </button>
                     </div>

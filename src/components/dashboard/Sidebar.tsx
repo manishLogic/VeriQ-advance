@@ -1,12 +1,15 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Home, Upload, Zap, Award, Settings, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useClerk } from "@clerk/nextjs";
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
+    const { signOut } = useClerk();
 
     const navItems = [
         { href: "/candidate/dashboard", icon: Home, label: "Dashboard" },
@@ -68,8 +71,8 @@ export default function Sidebar() {
                                 href={item.href}
                                 onClick={() => setIsOpen(false)}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors group border-l-2 ${isActive
-                                        ? "bg-white/5 text-white border-[#00d4d4]"
-                                        : "text-[#8a9ab0] hover:text-white hover:bg-white/5 border-transparent hover:border-white/20"
+                                    ? "bg-white/5 text-white border-[#00d4d4]"
+                                    : "text-[#8a9ab0] hover:text-white hover:bg-white/5 border-transparent hover:border-white/20"
                                     }`}
                             >
                                 <item.icon size={20} className={isActive ? "text-[#00d4d4]" : "group-hover:text-white transition-colors"} />
@@ -95,7 +98,7 @@ export default function Sidebar() {
                             <p className="text-sm font-medium text-white truncate">John Doe</p>
                             <p className="text-xs text-[#8a9ab0] truncate">Candidate</p>
                         </div>
-                        <button className="text-[#8a9ab0] hover:text-red-400 transition-colors">
+                        <button onClick={() => signOut(() => router.push("/"))} className="text-[#8a9ab0] hover:text-red-400 transition-colors">
                             <LogOut size={18} />
                         </button>
                     </div>
