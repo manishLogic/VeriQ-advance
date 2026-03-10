@@ -29,6 +29,7 @@ const itemVariants = {
 
 export default function LoginForm({ role }: LoginFormProps) {
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
 
     return (
         <motion.div
@@ -44,12 +45,19 @@ export default function LoginForm({ role }: LoginFormProps) {
                 <p className="text-[#8a9ab0] text-sm">Sign in to your account to continue</p>
             </motion.div>
 
-            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); window.location.href = `/${role}/dashboard`; }}>
+            <form className="space-y-4" onSubmit={(e) => {
+                e.preventDefault();
+                localStorage.setItem("user_role", role);
+                localStorage.setItem("user_email", email);
+                window.location.href = `/${role}/dashboard`;
+            }}>
                 <motion.div variants={itemVariants} className="space-y-1.5">
                     <label className="text-sm font-medium text-[#8a9ab0]">Email Address</label>
                     <input
                         type="email"
                         placeholder="john@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="w-full bg-[#070d14] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-[#8a9ab0]/50 focus:outline-none focus:border-[#00d4d4] focus:ring-1 focus:ring-[#00d4d4] transition-all"
                         required
                     />

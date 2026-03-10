@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Upload, Zap, Award, Settings, LogOut, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useClerk } from "@clerk/nextjs";
 
 export default function Sidebar() {
@@ -10,6 +10,23 @@ export default function Sidebar() {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const { signOut } = useClerk();
+    const [userEmail, setUserEmail] = useState("");
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const email = localStorage.getItem("user_email");
+        if (email) setUserEmail(email);
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user_role");
+        localStorage.removeItem("user_email");
+        signOut(() => router.push("/"));
+    };
+
+    if (!mounted) return null;
+
 
     const navItems = [
         { href: "/candidate/dashboard", icon: Home, label: "Dashboard" },
@@ -91,14 +108,14 @@ export default function Sidebar() {
 
                 <div className="p-4 border-t border-white/5">
                     <div className="flex items-center gap-3 px-4 py-3 rounded-xl group cursor-pointer hover:bg-white/5 transition-colors">
-                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-sora font-semibold text-white">
-                            JD
+                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-sora font-semibold text-white uppercase">
+                            {userEmail ? userEmail[0] : "C"}
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate">John Doe</p>
+                            <p className="text-sm font-medium text-white truncate capitalize">{userEmail ? userEmail.split('@')[0] : "Candidate"}</p>
                             <p className="text-xs text-[#8a9ab0] truncate">Candidate</p>
                         </div>
-                        <button onClick={() => signOut(() => router.push("/"))} className="text-[#8a9ab0] hover:text-red-400 transition-colors">
+                        <button onClick={handleLogout} className="text-[#8a9ab0] hover:text-red-400 transition-colors">
                             <LogOut size={18} />
                         </button>
                     </div>

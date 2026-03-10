@@ -1,6 +1,24 @@
+"use client";
+
 import Link from 'next/link';
+import { User } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function Navbar() {
+    const [userRole, setUserRole] = useState<string | null>(null);
+    const [userEmail, setUserEmail] = useState<string | null>(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const role = localStorage.getItem('user_role');
+        const email = localStorage.getItem('user_email');
+        if (role) setUserRole(role);
+        if (email) setUserEmail(email);
+    }, []);
+
+    if (!mounted) return null;
+
     return (
         <nav className="fixed top-0 w-full z-50 bg-[#070d14]/80 backdrop-blur-md border-b border-white/5">
             <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -14,12 +32,21 @@ export default function Navbar() {
                 </Link>
 
                 <div className="flex items-center gap-6">
-                    <Link href="/auth/login" className="text-sm font-medium text-[#8a9ab0] hover:text-white transition-colors hidden sm:block">
-                        Log In
-                    </Link>
-                    <Link href="/auth/register" className="bg-[#00d4d4] hover:bg-[#00e5e5] text-[#070d14] font-sora font-bold px-6 py-2.5 rounded-full transition-all hover:shadow-[0_0_20px_rgba(0,212,212,0.4)]">
-                        Get Started
-                    </Link>
+                    {userEmail && userRole ? (
+                        <Link href={`/${userRole}/dashboard`} className="flex items-center gap-2 text-sm font-medium text-white hover:text-[#00d4d4] transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-[#00d4d4]/50">
+                            <User size={16} />
+                            <span>{userEmail.split('@')[0]}</span>
+                        </Link>
+                    ) : (
+                        <>
+                            <Link href="/auth/login" className="text-sm font-medium text-[#8a9ab0] hover:text-white transition-colors hidden sm:block">
+                                Log In
+                            </Link>
+                            <Link href="/auth/register" className="bg-[#00d4d4] hover:bg-[#00e5e5] text-[#070d14] font-sora font-bold px-6 py-2.5 rounded-full transition-all hover:shadow-[0_0_20px_rgba(0,212,212,0.4)]">
+                                Get Started
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </nav>

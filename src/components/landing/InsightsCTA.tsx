@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function InsightsCTA() {
     return (
@@ -20,9 +21,9 @@ export default function InsightsCTA() {
                         <p className="text-[#8a9ab0] text-lg max-w-lg leading-relaxed">
                             Stop guessing on candidate capabilities. Start knowing with real-time, AI-validated skill tests that eliminate fraud.
                         </p>
-                        <button className="px-8 py-4 bg-[#00d4d4] hover:bg-[#00e5e5] text-[#070d14] font-sora font-bold rounded-full transition-all hover:shadow-[0_0_30px_rgba(0,212,212,0.4)] mt-4">
+                        <Link href="/auth/register" className="inline-block px-8 py-4 bg-[#00d4d4] hover:bg-[#00e5e5] text-[#070d14] font-sora font-bold rounded-full transition-all hover:shadow-[0_0_30px_rgba(0,212,212,0.4)] mt-4">
                             Get Started Free
-                        </button>
+                        </Link>
                     </div>
 
                     <div className="flex-1 grid grid-cols-2 gap-4 w-full">

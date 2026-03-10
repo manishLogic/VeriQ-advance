@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Users, FileBarChart, Settings, LogOut, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useClerk } from "@clerk/nextjs";
 
 export default function RecruiterSidebar() {
@@ -10,6 +10,23 @@ export default function RecruiterSidebar() {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const { signOut } = useClerk();
+    const [userEmail, setUserEmail] = useState("");
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const email = localStorage.getItem("user_email");
+        if (email) setUserEmail(email);
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user_role");
+        localStorage.removeItem("user_email");
+        signOut(() => router.push("/"));
+    };
+
+    if (!mounted) return null;
+
 
     const navItems = [
         { href: "/recruiter/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -91,14 +108,14 @@ export default function RecruiterSidebar() {
 
                 <div className="p-4 border-t border-white/5">
                     <div className="flex items-center gap-3 px-4 py-3 rounded-xl group cursor-pointer hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
-                        <div className="w-10 h-10 rounded-xl bg-[#00d4d4]/10 flex items-center justify-center font-sora font-semibold text-[#00d4d4] border border-[#00d4d4]/30 shadow-[0_0_10px_rgba(0,212,212,0.1)]">
-                            HR
+                        <div className="w-10 h-10 rounded-xl bg-[#00d4d4]/10 flex items-center justify-center font-sora font-semibold text-[#00d4d4] border border-[#00d4d4]/30 shadow-[0_0_10px_rgba(0,212,212,0.1)] uppercase">
+                            {userEmail ? userEmail[0] : "R"}
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate">Sarah Jensen</p>
-                            <p className="text-xs text-[#8a9ab0] truncate">Acme Corp</p>
+                            <p className="text-sm font-medium text-white truncate capitalize">{userEmail ? userEmail.split('@')[0] : "Recruiter"}</p>
+                            <p className="text-xs text-[#8a9ab0] truncate">Recruiter</p>
                         </div>
-                        <button onClick={() => signOut(() => router.push("/"))} className="text-[#8a9ab0] hover:text-red-400 transition-colors">
+                        <button onClick={handleLogout} className="text-[#8a9ab0] hover:text-red-400 transition-colors">
                             <LogOut size={18} />
                         </button>
                     </div>

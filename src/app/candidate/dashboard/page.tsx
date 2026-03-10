@@ -1,13 +1,29 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Award, Target, FileText, Zap } from "lucide-react";
 import { GlowCard } from "@/components/shared/GlowCard";
 import Link from "next/link";
 
 export default function CandidateDashboard() {
+    const [userName, setUserName] = useState("Candidate");
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const storedEmail = localStorage.getItem("user_email");
+        if (storedEmail) {
+            setUserName(storedEmail.split('@')[0]);
+        }
+    }, []);
+
+    if (!mounted) return null;
+
     return (
         <div className="p-8 md:p-12 max-w-6xl mx-auto space-y-10 animate-in fade-in duration-500">
 
             <header className="space-y-2">
-                <h1 className="text-3xl font-sora font-bold text-white">Welcome back, John 👋</h1>
+                <h1 className="text-3xl font-sora font-bold text-white">Welcome back, <span className="capitalize">{userName}</span> 👋</h1>
                 <p className="text-[#8a9ab0]">Here's what's happening with your verified profile.</p>
             </header>
 
