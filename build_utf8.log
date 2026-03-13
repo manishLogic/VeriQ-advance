@@ -41,15 +41,22 @@ Running "npm run build"
 Γû▓ Next.js 16.1.6 (Turbopack)
 - Environments: .env.local
 
+ΓÜá The "middleware" 
+file convention is 
+deprecated. Please use 
+"proxy" instead. Learn 
+more: https://nextjs.or
+g/docs/messages/middlew
+are-to-proxy
   Creating an optimized production build ...
-Γ£ô Compiled successfully in 10.4s
+Γ£ô Compiled successfully in 12.2s
   Running TypeScript ...
   Collecting page data using 7 workers ...
   Generating static pages using 7 workers (0/16) ...
   Generating static pages using 7 workers (4/16) 
   Generating static pages using 7 workers (8/16) 
   Generating static pages using 7 workers (12/16) 
-Γ£ô Generating static pages using 7 workers (16/16) in 1086.1ms
+Γ£ô Generating static pages using 7 workers (16/16) in 1047.0ms
   Finalizing page optimization ...
 
 Route (app)
@@ -76,8 +83,8 @@ Route (app)
 Γùï  (Static)   prerendered as static content
 ╞Æ  (Dynamic)  server-rendered on demand
 
-Tracing initial Next.js server files due to missing build trace: 17.104s
-Traced Next.js server files in: 18.313s
+Tracing initial Next.js server files due to missing build trace: 18.133s
+Traced Next.js server files in: 19.601s
 Tracing entries due to missing build traces:
 [
   "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/_global-error/page.js",
@@ -97,8 +104,8 @@ Tracing entries due to missing build traces:
   "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/api/stripe/checkout/route.js",
   "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/api/stripe/webhook/route.js",
   "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/favicon.ico/route.js"
-]: 82.086ms
-Created all serverless functions in: 235.984ms
+]: 64.804ms
+Created all serverless functions in: 218.86ms
 Error: Unable to find 
 lambda for route: 
 /auth/login

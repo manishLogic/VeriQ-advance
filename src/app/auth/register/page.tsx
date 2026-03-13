@@ -2,6 +2,8 @@
 import Link from "next/link";
 import RegistrationFlow from "@/components/auth/RegistrationFlow";
 
+export const dynamic = 'force-dynamic';
+
 export default function RegisterPage() {
     return (
         <main className="min-h-screen flex items-center justify-center bg-[#030712] p-6 relative overflow-hidden pt-12 pb-20">

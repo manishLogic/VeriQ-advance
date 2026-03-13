@@ -4,6 +4,8 @@ import Link from "next/link";
 import RoleToggle from "@/components/auth/RoleToggle";
 import LoginForm from "@/components/auth/LoginForm";
 
+export const dynamic = 'force-dynamic';
+
 export default function LoginPage() {
     const [role, setRole] = useState<"candidate" | "recruiter">("candidate");
 
