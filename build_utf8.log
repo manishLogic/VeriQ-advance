@@ -1,0 +1,104 @@
+﻿node.exe : WARNING! 
+Build not running on 
+Vercel. System 
+environment variables 
+will not be available.
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (WARNING! Buil   
+ d ...t be availabl    
+e.:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+WARNING: You should 
+not upload the `.next` 
+directory.
+Installing dependencies...
+
+up to date in 2s
+
+144 packages are looking for funding
+  run `npm fund` for details
+Detected Next.js version: 16.1.6
+Running "npm run build"
+
+> veriq-temp@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 10.4s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/16) ...
+  Generating static pages using 7 workers (4/16) 
+  Generating static pages using 7 workers (8/16) 
+  Generating static pages using 7 workers (12/16) 
+Γ£ô Generating static pages using 7 workers (16/16) in 1086.1ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ ╞Æ /api/auth/[...nextauth]
+Γö£ ╞Æ /api/chat
+Γö£ ╞Æ /api/stripe/checkout
+Γö£ ╞Æ /api/stripe/webhook
+Γö£ Γùï /auth/login
+Γö£ Γùï /auth/register
+Γö£ Γùï /candidate/dashboard
+Γö£ Γùï /candidate/skill-test
+Γö£ Γùï /candidate/trust-score
+Γö£ Γùï /candidate/upload
+Γö£ Γùï /pricing
+Γö£ Γùï /recruiter/candidates
+Γö£ ╞Æ /recruiter/candidates/[id]
+Γöö Γùï /recruiter/dashboard
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+
+Tracing initial Next.js server files due to missing build trace: 17.104s
+Traced Next.js server files in: 18.313s
+Tracing entries due to missing build traces:
+[
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/_global-error/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/_not-found/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/auth/login/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/auth/register/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/candidate/dashboard/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/candidate/skill-test/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/candidate/trust-score/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/candidate/upload/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/pricing/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/recruiter/candidates/[id]/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/recruiter/candidates/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/recruiter/dashboard/page.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/api/auth/[...nextauth]/route.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/api/chat/route.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/api/stripe/checkout/route.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/api/stripe/webhook/route.js",
+  "C:/Users/hpwor/OneDrive/Desktop/veriQ/.next/server/app/favicon.ico/route.js"
+]: 82.086ms
+Created all serverless functions in: 235.984ms
+Error: Unable to find 
+lambda for route: 
+/auth/login
