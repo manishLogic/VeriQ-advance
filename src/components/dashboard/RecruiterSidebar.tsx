@@ -3,20 +3,21 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Users, FileBarChart, Settings, LogOut, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 
 export default function RecruiterSidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const { signOut } = useClerk();
-    const [userEmail, setUserEmail] = useState("");
+    const { user, isLoaded: isClerkLoaded } = useUser();
+    const [localEmail, setLocalEmail] = useState("");
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
         const email = localStorage.getItem("user_email");
-        if (email) setUserEmail(email);
+        if (email) setLocalEmail(email);
     }, []);
 
     const handleLogout = () => {
@@ -25,7 +26,11 @@ export default function RecruiterSidebar() {
         signOut(() => router.push("/"));
     };
 
-    if (!mounted) return null;
+    if (!mounted || !isClerkLoaded) return null;
+
+    const displayEmail = user?.primaryEmailAddress?.emailAddress || localEmail;
+    const displayName = user?.fullName || user?.firstName || (displayEmail ? displayEmail.split('@')[0] : "Recruiter");
+    const displayInitial = displayName ? displayName.charAt(0) : "R";
 
 
     const navItems = [
@@ -109,10 +114,10 @@ export default function RecruiterSidebar() {
                 <div className="p-4 border-t border-white/5">
                     <div className="flex items-center gap-3 px-4 py-3 rounded-xl group cursor-pointer hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
                         <div className="w-10 h-10 rounded-xl bg-[#00d4d4]/10 flex items-center justify-center font-sora font-semibold text-[#00d4d4] border border-[#00d4d4]/30 shadow-[0_0_10px_rgba(0,212,212,0.1)] uppercase">
-                            {userEmail ? userEmail[0] : "R"}
+                            {displayInitial}
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate capitalize">{userEmail ? userEmail.split('@')[0] : "Recruiter"}</p>
+                            <p className="text-sm font-medium text-white truncate capitalize">{displayName}</p>
                             <p className="text-xs text-[#8a9ab0] truncate">Recruiter</p>
                         </div>
                         <button onClick={handleLogout} className="text-[#8a9ab0] hover:text-red-400 transition-colors">

@@ -3,21 +3,27 @@
 import Link from 'next/link';
 import { User } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useUser } from '@clerk/nextjs';
 
 export default function Navbar() {
-    const [userRole, setUserRole] = useState<string | null>(null);
-    const [userEmail, setUserEmail] = useState<string | null>(null);
+    const { user, isLoaded: isClerkLoaded } = useUser();
+    const [localRole, setLocalRole] = useState<string | null>(null);
+    const [localEmail, setLocalEmail] = useState<string | null>(null);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
         const role = localStorage.getItem('user_role');
         const email = localStorage.getItem('user_email');
-        if (role) setUserRole(role);
-        if (email) setUserEmail(email);
+        if (role) setLocalRole(role);
+        if (email) setLocalEmail(email);
     }, []);
 
-    if (!mounted) return null;
+    if (!mounted || !isClerkLoaded) return null;
+
+    const displayEmail = user?.primaryEmailAddress?.emailAddress || localEmail;
+    const displayName = user?.fullName || user?.firstName || (displayEmail ? displayEmail.split('@')[0] : "");
+    const displayRole = localRole || (user ? "candidate" : null);
 
     return (
         <nav className="fixed top-0 w-full z-50 bg-[#070d14]/80 backdrop-blur-md border-b border-white/5">
@@ -32,10 +38,10 @@ export default function Navbar() {
                 </Link>
 
                 <div className="flex items-center gap-6">
-                    {userEmail && userRole ? (
-                        <Link href={`/${userRole}/dashboard`} className="flex items-center gap-2 text-sm font-medium text-white hover:text-[#00d4d4] transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-[#00d4d4]/50">
+                    {displayEmail && displayRole ? (
+                        <Link href={`/${displayRole}/dashboard`} className="flex items-center gap-2 text-sm font-medium text-white hover:text-[#00d4d4] transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-[#00d4d4]/50">
                             <User size={16} />
-                            <span>{userEmail.split('@')[0]}</span>
+                            <span className="capitalize">{displayName}</span>
                         </Link>
                     ) : (
                         <>
