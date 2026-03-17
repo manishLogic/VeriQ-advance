@@ -7,7 +7,9 @@ export default function ResumeUpload() {
     const [progress, setProgress] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
 
-    const simulateUpload = () => {
+    const simulateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+        
         setIsUploading(true);
         let current = 0;
         const interval = setInterval(() => {
@@ -20,6 +22,10 @@ export default function ResumeUpload() {
         }, 300);
     };
 
+    const triggerFileInput = () => {
+        document.getElementById("resume-upload")?.click();
+    };
+
     return (
         <div className="p-8 md:p-12 max-w-4xl mx-auto space-y-10 animate-in fade-in">
             <header className="space-y-4 text-center pb-8 border-b border-white/5">
@@ -29,12 +35,19 @@ export default function ResumeUpload() {
 
             {!isComplete ? (
                 <div
-                    onClick={!isUploading ? simulateUpload : undefined}
+                    onClick={!isUploading ? triggerFileInput : undefined}
                     className={`border-2 border-dashed rounded-3xl p-16 text-center transition-all duration-300 ${isUploading
                             ? "border-[#00d4d4]/50 bg-[#00d4d4]/5 cursor-default"
                             : "border-white/20 bg-[#0d1722] hover:border-[#00d4d4]/50 hover:bg-[#0d1722]/80 cursor-pointer group"
                         }`}
                 >
+                    <input
+                        type="file"
+                        id="resume-upload"
+                        className="hidden"
+                        accept=".pdf,.doc,.docx"
+                        onChange={simulateUpload}
+                    />
                     <div className="w-20 h-20 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#00d4d4]/10 transition-colors">
                         <UploadCloud className={`w-10 h-10 ${isUploading ? 'text-[#00d4d4] animate-bounce' : 'text-[#8a9ab0] group-hover:text-[#00d4d4]'}`} />
                     </div>

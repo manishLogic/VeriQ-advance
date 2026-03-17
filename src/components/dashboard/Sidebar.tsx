@@ -20,10 +20,11 @@ export default function Sidebar() {
         if (email) setLocalEmail(email);
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         localStorage.removeItem("user_role");
         localStorage.removeItem("user_email");
-        signOut(() => router.push("/"));
+        await signOut();
+        router.push("/");
     };
 
     if (!mounted || !isClerkLoaded) return null;

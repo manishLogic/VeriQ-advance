@@ -20,10 +20,11 @@ export default function RecruiterSidebar() {
         if (email) setLocalEmail(email);
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         localStorage.removeItem("user_role");
         localStorage.removeItem("user_email");
-        signOut(() => router.push("/"));
+        await signOut();
+        router.push("/");
     };
 
     if (!mounted || !isClerkLoaded) return null;
@@ -36,7 +37,7 @@ export default function RecruiterSidebar() {
     const navItems = [
         { href: "/recruiter/dashboard", icon: LayoutDashboard, label: "Dashboard" },
         { href: "/recruiter/candidates", icon: Users, label: "Browse Candidates" },
-        { href: "#", icon: FileBarChart, label: "Reports" },
+        { href: "/recruiter/candidates", icon: FileBarChart, label: "Reports" },
     ];
 
     return (
