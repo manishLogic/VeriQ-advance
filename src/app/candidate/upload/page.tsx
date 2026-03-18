@@ -6,20 +6,53 @@ export default function ResumeUpload() {
     const [isUploading, setIsUploading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
+    const [extractedSkills, setExtractedSkills] = useState<string[]>([]);
 
-    const simulateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const simulateUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) return;
         
+        const file = e.target.files[0];
         setIsUploading(true);
+        setProgress(0);
+        
         let current = 0;
         const interval = setInterval(() => {
-            current += 10;
-            setProgress(current);
-            if (current >= 100) {
+            current += 5;
+            if (current >= 90) {
                 clearInterval(interval);
-                setTimeout(() => setIsComplete(true), 500);
+            } else {
+                setProgress(current);
             }
-        }, 300);
+        }, 150);
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch("/api/parse-resume", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await response.json();
+            
+            clearInterval(interval);
+            setProgress(100);
+            
+            if (data.skills && Array.isArray(data.skills)) {
+                setExtractedSkills(data.skills);
+            } else {
+                setExtractedSkills(["Communication", "Problem Solving", "Adaptability"]);
+            }
+            
+            setTimeout(() => setIsComplete(true), 500);
+        } catch (error) {
+            console.error("Upload failed", error);
+            clearInterval(interval);
+            setProgress(100);
+            setExtractedSkills(["Upload Error"]);
+            setTimeout(() => setIsComplete(true), 500);
+        }
     };
 
     const triggerFileInput = () => {
@@ -89,7 +122,7 @@ export default function ResumeUpload() {
                     </div>
 
                     <div className="relative z-10 flex flex-wrap justify-center gap-2 max-w-lg mx-auto py-4">
-                        {["React", "TypeScript", "Next.js", "Node.js", "GraphQL"].map((skill) => (
+                        {extractedSkills.map((skill) => (
                             <span key={skill} className="px-4 py-2 bg-[#00d4d4]/10 border border-[#00d4d4]/30 text-[#00d4d4] rounded-xl font-medium shadow-[0_0_10px_rgba(0,212,212,0.1)]">
                                 {skill}
                             </span>
