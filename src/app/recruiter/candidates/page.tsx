@@ -5,10 +5,11 @@ import Link from "next/link";
 import { GlowCard } from "@/components/shared/GlowCard";
 
 const FALLBACK_CANDIDATES = [
-    { id: "can_1", name: "David Chen", role: "Senior Frontend Engineer", score: 92, match: "Excellent", skills: ["React", "TypeScript", "Next.js"] },
-    { id: "can_2", name: "Sarah Miller", role: "Full Stack Developer", score: 88, match: "Strong", skills: ["Node.js", "Next.js", "PostgreSQL"] },
-    { id: "can_3", name: "Michael Chang", role: "React Native Developer", score: 74, match: "Average", skills: ["React Native", "TypeScript", "Redux"] },
-    { id: "can_4", name: "Elena Rodriguez", role: "Backend Engineer", score: 95, match: "Excellent", skills: ["Python", "Django", "AWS"] },
+    { id: "can_1", name: "David Chen", role: "Senior Frontend Engineer", score: 92, match: "Excellent", skills: ["React", "TypeScript", "Next.js"], hasAttemptedTest: true },
+    { id: "can_2", name: "Sarah Miller", role: "Full Stack Developer", score: 88, match: "Strong", skills: ["Node.js", "Next.js", "PostgreSQL"], hasAttemptedTest: true },
+    { id: "can_3", name: "Michael Chang", role: "React Native Developer", score: null, match: "Pending", skills: ["React Native", "TypeScript", "Redux"], hasAttemptedTest: false },
+    { id: "can_4", name: "Elena Rodriguez", role: "Backend Engineer", score: 95, match: "Excellent", skills: ["Python", "Django", "AWS"], hasAttemptedTest: true },
+    { id: "can_5", name: "James Smith", role: "Full Stack Developer", score: null, match: "Pending", skills: ["Java", "Spring Boot", "React"], hasAttemptedTest: false },
 ];
 
 export default function BrowseCandidates() {
@@ -28,8 +29,9 @@ export default function BrowseCandidates() {
                         name: p.name,
                         role: p.role,
                         score: p.score,
-                        match: p.score > 90 ? "Excellent" : p.score > 80 ? "Strong" : "Average",
-                        skills: ["React", "TypeScript", "Node.js"]
+                        match: p.score ? (p.score > 90 ? "Excellent" : p.score > 80 ? "Strong" : "Average") : "Pending",
+                        skills: ["React", "TypeScript", "Node.js"],
+                        hasAttemptedTest: !!p.score
                     }));
                     setCandidates([...mapped, ...FALLBACK_CANDIDATES]);
                 } catch (e) {
@@ -50,8 +52,8 @@ export default function BrowseCandidates() {
         <div className="p-8 md:p-12 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-sora font-bold text-white">Browse Verified Candidates</h1>
-                    <p className="text-[#8a9ab0]">Filter and discover talent backed by Trust Scores.</p>
+                    <h1 className="text-3xl font-sora font-bold text-white">All Candidates</h1>
+                    <p className="text-[#8a9ab0]">A complete list of registered candidates. View their profile or test status.</p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -73,76 +75,79 @@ export default function BrowseCandidates() {
                 />
             </div>
 
-            {/* Grid */}
-            <div className="grid grid-cols-1 w-full md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {/* List */}
+            <div className="space-y-4">
                 {isLoading ? (
-                    Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className="bg-[#0b1120] border border-white/5 rounded-2xl p-6 h-[280px] flex flex-col justify-between animate-pulse">
-                            <div>
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="w-14 h-14 rounded-full bg-white/5" />
-                                    <div className="w-14 h-14 rounded-full bg-white/5" />
-                                </div>
-                                <div className="h-6 w-3/4 bg-white/5 rounded-md mb-2" />
-                                <div className="h-4 w-1/2 bg-white/5 rounded-md mb-6" />
-                                <div className="flex gap-2 mb-6">
-                                    <div className="h-6 w-16 bg-white/5 rounded-md" />
-                                    <div className="h-6 w-16 bg-white/5 rounded-md" />
+                    Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="bg-[#0b1120] border border-white/5 rounded-2xl p-6 flex flex-col sm:flex-row justify-between animate-pulse">
+                            <div className="flex gap-4">
+                                <div className="w-14 h-14 rounded-full bg-white/5" />
+                                <div>
+                                    <div className="h-6 w-32 bg-white/5 rounded-md mb-2" />
+                                    <div className="h-4 w-48 bg-white/5 rounded-md" />
                                 </div>
                             </div>
-                            <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
-                                <div className="h-4 w-20 bg-white/5 rounded-md" />
+                            <div className="mt-4 sm:mt-0 flex flex-col items-end">
+                                <div className="h-6 w-20 bg-white/5 rounded-md mb-2" />
                                 <div className="h-8 w-24 bg-white/5 rounded-xl" />
                             </div>
                         </div>
                     ))
                 ) : (
                     filteredCandidates.map((candidate) => {
-                        let scoreColor = "text-green-400 bg-green-400/10 border-green-400/20";
-                        let badgeColor = "bg-green-500";
-                        if (candidate.score < 60) {
-                            scoreColor = "text-red-400 bg-red-400/10 border-red-400/20";
-                            badgeColor = "bg-red-500";
-                        } else if (candidate.score < 80) {
-                            scoreColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
-                            badgeColor = "bg-yellow-500";
+                        let scoreColor = "text-[#8a9ab0] bg-white/5 border-white/10";
+                        let badgeColor = "bg-[#8a9ab0]";
+                        
+                        if (candidate.hasAttemptedTest && candidate.score !== null) {
+                            if (candidate.score < 60) {
+                                scoreColor = "text-red-400 bg-red-400/10 border-red-400/20";
+                                badgeColor = "bg-red-500";
+                            } else if (candidate.score < 80) {
+                                scoreColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+                                badgeColor = "bg-yellow-500";
+                            } else {
+                                scoreColor = "text-green-400 bg-green-400/10 border-green-400/20";
+                                badgeColor = "bg-green-500";
+                            }
                         }
 
                         return (
-                            <GlowCard key={candidate.id} className="flex flex-col justify-between h-full p-6">
-                                <div>
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center font-sora font-bold text-white text-xl border border-white/10">
-                                            {candidate.name.split(" ").map((n: string) => n[0]).join("")}
-                                        </div>
-                                        <div className={`flex flex-col items-center justify-center w-14 h-14 rounded-full border ${scoreColor}`}>
-                                            <span className="font-sora font-bold">{candidate.score}</span>
-                                        </div>
+                            <GlowCard key={candidate.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 w-full">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center font-sora font-bold text-white text-xl border border-white/10">
+                                        {candidate.name.split(" ").map((n: string) => n[0]).join("")}
                                     </div>
-
-                                    <h3 className="text-xl font-sora font-semibold text-white hover:text-[#00d4d4] transition-colors">
-                                        <Link href={`/recruiter/candidates/${candidate.id}`}>{candidate.name}</Link>
-                                    </h3>
-                                    <p className="text-sm text-[#8a9ab0] mb-4">{candidate.role}</p>
-
-                                    <div className="flex flex-wrap gap-2 mb-6">
-                                        {candidate.skills.slice(0, 3).map((skill: string) => (
-                                            <span key={skill} className="px-2.5 py-1 bg-[#00d4d4]/10 border border-[#00d4d4]/20 text-[#00d4d4] rounded-lg text-xs font-medium">
-                                                {skill}
-                                            </span>
-                                        ))}
-                                        {candidate.skills.length > 3 && (
-                                            <span className="px-2.5 py-1 bg-white/5 text-[#8a9ab0] rounded-lg text-xs font-medium">+{candidate.skills.length - 3}</span>
-                                        )}
+                                    <div>
+                                        <h3 className="text-xl font-sora font-semibold text-white hover:text-[#00d4d4] transition-colors">
+                                            <Link href={`/recruiter/candidates/${candidate.id}`}>{candidate.name}</Link>
+                                        </h3>
+                                        <p className="text-sm text-[#8a9ab0] mb-2">{candidate.role}</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {candidate.skills.slice(0, 3).map((skill: string) => (
+                                                <span key={skill} className="px-2.5 py-1 bg-[#00d4d4]/10 border border-[#00d4d4]/20 text-[#00d4d4] rounded-lg text-xs font-medium">
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                            {candidate.skills.length > 3 && (
+                                                <span className="px-2.5 py-1 bg-white/5 text-[#8a9ab0] rounded-lg text-xs font-medium">+{candidate.skills.length - 3}</span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
-                                    <div className="flex items-center gap-1.5 text-xs font-medium text-white">
-                                        <div className={`w-2 h-2 rounded-full ${badgeColor}`} />
-                                        {candidate.match} Match
+                                <div className="flex items-center gap-6 mt-6 sm:mt-0 w-full sm:w-auto justify-between sm:justify-end">
+                                    <div className="flex flex-col items-center">
+                                        <div className="flex items-center gap-1.5 text-xs font-medium text-white mb-2">
+                                            <div className={`w-2 h-2 rounded-full ${badgeColor}`} />
+                                            {candidate.hasAttemptedTest ? `${candidate.match} Match` : "Test Pending"}
+                                        </div>
+                                        <div className={`flex items-center justify-center px-4 py-2 rounded-xl border ${scoreColor}`}>
+                                            <span className="font-sora font-bold text-sm">
+                                                {candidate.hasAttemptedTest ? `Score: ${candidate.score}` : "No Score"}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <Link href={`/recruiter/candidates/${candidate.id}`} className="text-sm font-semibold text-[#00d4d4] hover:text-[#00e5e5] px-4 py-2 bg-[#00d4d4]/10 rounded-xl transition-colors">
+                                    <Link href={`/recruiter/candidates/${candidate.id}`} className="text-sm font-semibold text-[#00d4d4] hover:text-[#00e5e5] px-4 py-2 bg-[#00d4d4]/10 rounded-xl transition-colors whitespace-nowrap">
                                         View Profile
                                     </Link>
                                 </div>
@@ -157,7 +162,6 @@ export default function BrowseCandidates() {
                     <p className="text-[#8a9ab0]">No candidates found matching your criteria.</p>
                 </div>
             )}
-
         </div>
     );
 }

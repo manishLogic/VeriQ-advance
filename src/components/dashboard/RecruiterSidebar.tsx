@@ -37,7 +37,7 @@ export default function RecruiterSidebar() {
     const navItems = [
         { href: "/recruiter/dashboard", icon: LayoutDashboard, label: "Dashboard" },
         { href: "/recruiter/candidates", icon: Users, label: "Browse Candidates" },
-        { href: "/recruiter/candidates", icon: FileBarChart, label: "Reports" },
+        { href: "/recruiter/reports", icon: FileBarChart, label: "Reports" },
     ];
 
     return (
