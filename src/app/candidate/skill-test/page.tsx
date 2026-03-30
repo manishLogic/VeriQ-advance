@@ -5,14 +5,30 @@ import { GlowCard } from "@/components/shared/GlowCard";
 
 type TestState = "list" | "active" | "result";
 
-const PENDING_TESTS = [
-    { id: 1, name: "React Engineering", qs: 10, time: "10s/q" },
-    { id: 2, name: "TypeScript Core", qs: 10, time: "10s/q" },
-    { id: 3, name: "Next.js Architecture", qs: 10, time: "10s/q" }
-];
-
 export default function SkillTest() {
+    const [pendingTests, setPendingTests] = useState([
+        { id: 1, name: "React Engineering", qs: 10, time: "10s/q" },
+        { id: 2, name: "TypeScript Core", qs: 10, time: "10s/q" },
+        { id: 3, name: "Next.js Architecture", qs: 10, time: "10s/q" }
+    ]);
     const [testState, setTestState] = useState<TestState>("list");
+
+    useEffect(() => {
+        const stored = localStorage.getItem("extractedSkills");
+        if (stored) {
+            try {
+                const skills = JSON.parse(stored);
+                if (Array.isArray(skills) && skills.length > 0) {
+                    setPendingTests(skills.map((skill: string, index: number) => ({
+                        id: index + 1,
+                        name: `${skill} Assessment`,
+                        qs: 10,
+                        time: "10s/q"
+                    })));
+                }
+            } catch (e) {}
+        }
+    }, []);
     const [activeTest, setActiveTest] = useState<string>("");
     const [qIndex, setQIndex] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10);
@@ -67,7 +83,7 @@ export default function SkillTest() {
                 </header>
 
                 <div className="grid gap-4">
-                    {PENDING_TESTS.map((test) => (
+                    {pendingTests.map((test) => (
                         <GlowCard key={test.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">

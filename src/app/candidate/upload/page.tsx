@@ -41,8 +41,11 @@ export default function ResumeUpload() {
             
             if (data.skills && Array.isArray(data.skills)) {
                 setExtractedSkills(data.skills);
+                localStorage.setItem("extractedSkills", JSON.stringify(data.skills));
             } else {
-                setExtractedSkills(["Communication", "Problem Solving", "Adaptability"]);
+                const fallback = ["Communication", "Problem Solving", "Adaptability"];
+                setExtractedSkills(fallback);
+                localStorage.setItem("extractedSkills", JSON.stringify(fallback));
             }
             
             setTimeout(() => setIsComplete(true), 500);

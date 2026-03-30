@@ -115,7 +115,7 @@ export default function Hero() {
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                         </Link>
 
-                        <Link href="/recruiter/dashboard" className="flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-transparent border border-white/10 text-white font-medium rounded-2xl hover:bg-white/5 hover:border-white/20 transition-all">
+                        <Link href="/recruiter/candidates/1" className="flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-transparent border border-white/10 text-white font-medium rounded-2xl hover:bg-white/5 hover:border-white/20 transition-all">
                             View Sample Report
                         </Link>
                     </motion.div>

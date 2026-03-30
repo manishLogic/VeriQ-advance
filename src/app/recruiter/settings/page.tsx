@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User, Bell, Briefcase, CreditCard, Users, Loader2, Check, X } from "lucide-react";
+import { User, Bell, Briefcase, CreditCard, Users, Loader2, Check, X, ShieldCheck } from "lucide-react";
 
 export default function RecruiterSettings() {
     const [activeTab, setActiveTab] = useState("company");
@@ -15,6 +15,11 @@ export default function RecruiterSettings() {
     const [inviteEmail, setInviteEmail] = useState("");
     const [inviteRole, setInviteRole] = useState("Recruiter");
     const [isInviting, setIsInviting] = useState(false);
+
+    // Payment Modal State
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState("card");
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
     // Dynamic Team Management State
     const [teamMembers, setTeamMembers] = useState([
@@ -36,7 +41,7 @@ export default function RecruiterSettings() {
 
             // Trigger specific actions/toasts based on the button clicked
             if (section === "upgrade") {
-                showToast("Redirecting to secure Stripe checkout sequence...");
+                setShowPaymentModal(true);
             } else if (section === "cancel") {
                 showToast("Cancellation request initiated. Please check your email.");
             } else if (section === "payment") {
@@ -46,7 +51,7 @@ export default function RecruiterSettings() {
             }
 
             setTimeout(() => setSavedSection(null), 2000);
-        }, 1200);
+        }, 800);
     };
 
     const submitInvite = (e: React.FormEvent) => {
@@ -68,6 +73,15 @@ export default function RecruiterSettings() {
             setInviteRole("Recruiter");
             showToast(`Invitation successfully sent to ${inviteEmail}!`);
         }, 1500);
+    };
+
+    const submitPayment = () => {
+        setIsProcessingPayment(true);
+        setTimeout(() => {
+            setIsProcessingPayment(false);
+            setShowPaymentModal(false);
+            showToast("Payment successful! Your subscription is now active.");
+        }, 2000);
     };
 
     const removeMember = (id: number) => {
@@ -202,6 +216,111 @@ export default function RecruiterSettings() {
                 </div>
             )}
 
+            {/* Payment Modal Overlay */}
+            {showPaymentModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+                        onClick={() => !isProcessingPayment && setShowPaymentModal(false)}
+                    />
+                    
+                    {/* Modal Content */}
+                    <div className="relative w-full max-w-md bg-[#0d1722] border border-white/10 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden">
+                        {/* Decorative glow */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-[#00d4d4] shadow-[0_0_20px_rgba(0,212,212,0.6)]" />
+                        
+                        <div className="p-6 md:p-8 space-y-6">
+                            <div className="flex items-center justify-between mb-2">
+                                <div>
+                                    <h2 className="text-2xl font-sora font-semibold text-white">Upgrade to Pro</h2>
+                                    <p className="text-[#8a9ab0] text-sm mt-1">Unlock advanced resume AI parsing.</p>
+                                </div>
+                                <button 
+                                    onClick={() => !isProcessingPayment && setShowPaymentModal(false)}
+                                    className="p-2 text-[#8a9ab0] hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors shrink-0 outline-none"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            <div className="p-5 bg-[#00d4d4]/5 border border-[#00d4d4]/20 rounded-xl relative overflow-hidden flex items-center justify-between">
+                                <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#00d4d4]/10 blur-xl rounded-full" />
+                                <div className="relative z-10">
+                                    <p className="text-sm text-[#8a9ab0] font-medium uppercase tracking-wider mb-1">Total Amount</p>
+                                    <p className="text-3xl font-sora font-bold text-white">$199<span className="text-xl text-white/50">/mo</span></p>
+                                </div>
+                                <ShieldCheck className="w-10 h-10 text-[#00d4d4] opacity-80" />
+                            </div>
+                            
+                            <div className="space-y-3">
+                                <p className="text-sm font-medium text-white mb-2">Select Payment Method</p>
+                                
+                                <label className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-colors ${paymentMethod === 'card' ? 'bg-[#00d4d4]/10 border-[#00d4d4]/50' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}>
+                                    <input 
+                                        type="radio" 
+                                        name="payment_method" 
+                                        className="accent-[#00d4d4] w-4 h-4"
+                                        checked={paymentMethod === 'card'}
+                                        onChange={() => setPaymentMethod('card')}
+                                    />
+                                    <div className="flex-1 flex justify-between items-center">
+                                        <span className="text-white font-medium">Credit Card</span>
+                                        <div className="flex gap-2">
+                                            <div className="w-8 h-5 bg-white/10 rounded border border-white/20 flex items-center justify-center text-[8px] font-bold text-white">VISA</div>
+                                            <div className="w-8 h-5 bg-white/10 rounded border border-white/20 flex items-center justify-center text-[8px] font-bold text-white">MC</div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-colors ${paymentMethod === 'paypal' ? 'bg-[#00d4d4]/10 border-[#00d4d4]/50' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}>
+                                    <input 
+                                        type="radio" 
+                                        name="payment_method" 
+                                        className="accent-[#00d4d4] w-4 h-4"
+                                        checked={paymentMethod === 'paypal'}
+                                        onChange={() => setPaymentMethod('paypal')}
+                                    />
+                                    <div className="flex-1 flex justify-between items-center">
+                                        <span className="text-white font-medium">PayPal</span>
+                                        <span className="text-blue-400 font-bold italic text-sm">PayPal</span>
+                                    </div>
+                                </label>
+                                
+                                <label className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-colors ${paymentMethod === 'crypto' ? 'bg-[#00d4d4]/10 border-[#00d4d4]/50' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}>
+                                    <input 
+                                        type="radio" 
+                                        name="payment_method" 
+                                        className="accent-[#00d4d4] w-4 h-4"
+                                        checked={paymentMethod === 'crypto'}
+                                        onChange={() => setPaymentMethod('crypto')}
+                                    />
+                                    <div className="flex-1 flex justify-between items-center">
+                                        <span className="text-white font-medium">Crypto (USDC / BTC)</span>
+                                        <span className="text-yellow-400 font-bold text-sm">₿</span>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <button 
+                                onClick={submitPayment}
+                                disabled={isProcessingPayment}
+                                className="w-full py-4 mt-4 bg-[#00d4d4] hover:bg-[#00e5e5] text-[#030712] font-sora font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(0,212,212,0.3)] disabled:opacity-70 flex justify-center items-center"
+                            >
+                                {isProcessingPayment ? (
+                                    <><Loader2 className="animate-spin inline mr-2" size={18} /> Processing securely...</>
+                                ) : (
+                                    `Pay $199.00 via ${paymentMethod === 'card' ? 'Card' : paymentMethod === 'paypal' ? 'PayPal' : 'Crypto'}`
+                                )}
+                            </button>
+                            <p className="text-center text-xs text-[#54647a] mt-4 flex items-center justify-center gap-2">
+                                <ShieldCheck size={12} /> SSL Secured Payment Processing
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <header className="mb-10 lg:text-left text-center">
                 <h1 className="text-3xl font-sora font-bold text-white mb-2">Workspace Settings</h1>
                 <p className="text-[#8a9ab0]">Manage your company profile, billing, and team.</p>
@@ -320,7 +439,7 @@ export default function RecruiterSettings() {
                                             onClick={() => handleSave("upgrade")}
                                             className="px-6 py-2.5 bg-[#00d4d4] hover:bg-[#00e5e5] text-[#030712] font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(0,212,212,0.2)] w-full text-center"
                                         >
-                                            {isSaving === "upgrade" ? <Loader2 className="animate-spin mx-auto inline" size={18} /> : savedSection === "upgrade" ? "Redirecting..." : "Upgrade Plan"}
+                                            {isSaving === "upgrade" ? <Loader2 className="animate-spin mx-auto inline" size={18} /> : "Upgrade Plan"}
                                         </button>
                                         <button 
                                             onClick={() => handleSave("cancel")}
