@@ -105,7 +105,7 @@ export default function RecruiterSidebar() {
                     })}
 
                     <div className="pt-4 mt-4 border-t border-white/5">
-                        <Link href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#8a9ab0] hover:text-white hover:bg-white/5 transition-colors group border-l-2 border-transparent hover:border-white/20">
+                        <Link href="/recruiter/settings" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#8a9ab0] hover:text-white hover:bg-white/5 transition-colors group border-l-2 border-transparent hover:border-white/20">
                             <Settings size={20} className="group-hover:text-white transition-colors" />
                             Settings
                         </Link>
