@@ -49,12 +49,13 @@ export default function ResumeUpload() {
             }
             
             setTimeout(() => setIsComplete(true), 500);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Upload failed", error);
             clearInterval(interval);
             setProgress(100);
-            setExtractedSkills(["Upload Error"]);
-            setTimeout(() => setIsComplete(true), 500);
+            setIsUploading(false);
+            setExtractedSkills(["Network Error or API Issue"]);
+            // DO NOT set isComplete to true, otherwise it renders a fake success screen!
         }
     };
 

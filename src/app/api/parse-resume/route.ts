@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Call Gemini
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
         const prompt = `
 You are an expert technical recruiter and resume parser.
 I will provide you with the raw text extracted from a candidate's resume. 
