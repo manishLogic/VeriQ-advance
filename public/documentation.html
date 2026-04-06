@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeriQ Architecture & Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #070d14;
+            --bg-surface: #0d1722;
+            --text-main: #ffffff;
+            --text-muted: #8a9ab0;
+            --primary: #00d4d4;
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --primary-glow: rgba(0, 212, 212, 0.15);
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Sora', sans-serif;
+            margin: 0;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Abstract Glow Effects */
+        .glow-circle {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.05;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-glass);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            color: var(--text-main);
+            font-size: 1.8rem;
+            margin-top: 40px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--primary-glow);
+        }
+
+        h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-top: 30px;
+        }
+
+        p, li {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary-glow);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: var(--bg-deep);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .step-content h4 {
+            color: var(--text-main);
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
+        }
+
+        .step-content p {
+            margin: 0;
+        }
+
+        /* Print Media Query for perfect PDF Export */
+        @media print {
+            body {
+                background-color: var(--bg-deep) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .card {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-circle"></div>
+    <div class="container">
+        
+        <header>
+            <h1>VeriQ Platform</h1>
+            <p>Technical Architecture & Workflow Documentation</p>
+        </header>
+
+        <section class="card">
+            <h2>1. Technology Stack Breakdown</h2>
+            <p>VeriQ operates on a highly modernized, serverless JavaScript ecosystem optimized for AI speed and modern glassmorphic aesthetics.</p>
+            
+            <h3>Frontend (Client Interface)</h3>
+            <ul>
+                <li><strong>Next.js 14+ (App Router):</strong> Core React framework for seamless page rendering and routing.</li>
+                <li><strong>TypeScript:</strong> Type-safe codebase for preventing data mismatch vulnerabilities.</li>
+                <li><strong>Tailwind CSS v4:</strong> Core styling engine driving the signature dark mode <code>#070d14</code> and neon cyan <code>#00d4d4</code> color scheme.</li>
+                <li><strong>Framer Motion:</strong> GPU-accelerated engine powering fluid micro-animations and drop-zone physics.</li>
+                <li><strong>Lucide React:</strong> Vector iconography embedded throughout the UI.</li>
+            </ul>
+
+            <h3>Backend & Security Infrastructure</h3>
+            <ul>
+                <li><strong>Clerk Integration:</strong> Zero-trust authentication processing, managing multi-factor candidate login and session security natively via <code>@clerk/nextjs</code>.</li>
+                <li><strong>Next.js Serverless API:</strong> High-performance edge/node backend handling secure file buffer processing without a heavy standalone server.</li>
+                <li><strong>pdf-parse (Node.js):</strong> Native binary extractor that effortlessly strips raw text syntax directly out of uploaded Resume PDFs.</li>
+            </ul>
+
+            <h3>Artificial Intelligence Core</h3>
+            <div>
+                <span class="badge">gemini-pro</span>
+                <span class="badge">gemini-1.5-flash</span>
+                <span class="badge">@google/generative-ai</span>
+            </div>
+            <p>The platform natively integrates Google's bleeding-edge Generative AI directly into its pipeline. Gemini is explicitly instructed via systemic prompt engineering to extract strictly structured JSON payloads, drastically reducing output hallucinations.</p>
+        </section>
+
+        <section class="card">
+            <h2>2. Application System Workflow</h2>
+            <p>This is the seamless, automated user journey from the moment a candidate enters the system to the final analytical scoring report.</p>
+
+            <div class="workflow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Authentication Phase</h4>
+                    <p>The candidate lands on the VeriQ homepage and selects "Get Started". They are immediately verified through Clerk's SSO overlay, securely logging them into their active candidate profile dashboard.</p>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Resume Extraction & AI Target Lock</h4>
+                    <p>The candidate drags and drops their technical PDF Resume onto the dashboard. The system uploads the buffer to the <code>/api/parse-resume</code> backend. Node.js strips the text, and Google Gemini aggressively hunts down the explicit core technical skills in the text, formatting them into an array while filtering out padded soft skills.</p>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Dynamic Assessment Compilation</h4>
+                    <p>The UI visually acknowledges the successfully targeted skills. The candidate clicks "Proceed to Test". Behind the scenes, the <code>/api/generate-test</code> route contacts Gemini to dynamically create 10 bespoke, anti-cheat Technical Multiple Choice Questions (MCQs) mapped precisely to the applicant's declared tech stack.</p>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Execution & Scoring Pipeline</h4>
+                    <p>The candidate completes the generated exam. The frontend logic securely verifies their choices against the mathematical answers embedded within the AI's hidden JSON payload. The final score is generated, unlocking the capability for high-level Recruiter Dashboards to view precise, validated skill metrics.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <footer style="text-align: center; margin-top: 50px; opacity: 0.5;">
+            <p>&copy; Proprietary Architecture Documentation - VeriQ</p>
+        </footer>
+
+    </div>
+</body>
+</html>
