@@ -30,7 +30,12 @@ export async function POST(req: NextRequest) {
         }
 
         // Call Gemini
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-flash",
+            generationConfig: {
+                responseMimeType: "application/json"
+            }
+        });
         const prompt = `
 You are an expert technical recruiter and resume parser.
 I will provide you with the raw text extracted from a candidate's resume. 
@@ -50,9 +55,15 @@ ${text.substring(0, 10000)}
         
         let skills: string[] = [];
         try {
-            // strip backticks and json identifier if Gemini included them
-            const cleanJson = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
-            skills = JSON.parse(cleanJson);
+            // strip backticks and json identifier if Gemini included them (fallback just in case)
+            const cleanJson = responseText.replace(/```json/gi, "").replace(/```/g, "").trim();
+            // find the array part in case there's extra text
+            const match = cleanJson.match(/\[[\s\S]*\]/);
+            if (match) {
+                skills = JSON.parse(match[0]);
+            } else {
+                skills = JSON.parse(cleanJson);
+            }
         } catch (e) {
             console.error("Failed to parse Gemini response:", responseText);
             return NextResponse.json({ error: "Failed to parse skills from resume." }, { status: 500 });
