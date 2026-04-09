@@ -84,7 +84,7 @@ export default function LoginPage() {
                                     disabled={!role}
                                     className="w-full mt-8 py-4 bg-[#00d4d4] text-[#030712] font-semibold rounded-xl transition-all hover:bg-[#00e5e5] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
-                                    Continue to Login <ChevronRight size={18} />
+                                    Continue <ChevronRight size={18} />
                                 </button>
                             </motion.div>
                         )}
@@ -94,14 +94,62 @@ export default function LoginPage() {
                                 key="step2"
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: 20 }}
+                                exit={{ opacity: 0, x: -20 }}
                                 className="relative z-10"
                             >
                                 <button 
                                     onClick={() => setStep(1)} 
-                                    className="flex items-center gap-2 text-[#8a9ab0] hover:text-white text-sm mb-6 transition-colors"
+                                    className="absolute -top-2 -left-2 sm:-left-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/5 hover:bg-[#00d4d4]/10 text-[#8a9ab0] hover:text-[#00d4d4] transition-all border border-white/5 hover:border-[#00d4d4]/30 z-20 group"
+                                    title="Back to roles"
                                 >
-                                    <ArrowLeft size={16} /> Back to roles
+                                    <ArrowLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
+                                </button>
+                                
+                                <div className="text-center mb-8">
+                                    <h2 className="text-2xl font-sora font-bold text-white mb-2">Welcome</h2>
+                                    <p className="text-sm text-[#8a9ab0]">Do you already have an account?</p>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <button
+                                        onClick={() => setStep(3)}
+                                        className="w-full text-left p-6 rounded-2xl border bg-white/5 border-white/5 hover:border-[#00d4d4]/50 hover:bg-[#00d4d4]/5 transition-all duration-300 flex items-center justify-between group"
+                                    >
+                                        <div>
+                                            <h3 className="font-semibold text-white mb-1">Log In</h3>
+                                            <p className="text-xs text-[#8a9ab0]">Sign in to your existing account</p>
+                                        </div>
+                                        <ChevronRight className="text-[#8a9ab0] group-hover:text-[#00d4d4] group-hover:translate-x-1 transition-all" size={20} />
+                                    </button>
+
+                                    <Link
+                                        href={`/auth/register?role=${role}`}
+                                        className="w-full text-left p-6 block rounded-2xl border bg-white/5 border-white/5 hover:border-[#00d4d4]/50 hover:bg-[#00d4d4]/5 transition-all duration-300 flex items-center justify-between group"
+                                    >
+                                        <div>
+                                            <h3 className="font-semibold text-white mb-1">Create an Account</h3>
+                                            <p className="text-xs text-[#8a9ab0]">Sign up as a new {role === 'candidate' ? 'Candidate' : 'Recruiter'}</p>
+                                        </div>
+                                        <ChevronRight className="text-[#8a9ab0] group-hover:text-[#00d4d4] group-hover:translate-x-1 transition-all" size={20} />
+                                    </Link>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {step === 3 && role && (
+                            <motion.div
+                                key="step3"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 20 }}
+                                className="relative z-10"
+                            >
+                                <button 
+                                    onClick={() => setStep(2)} 
+                                    className="absolute -top-2 -left-2 sm:-left-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/5 hover:bg-[#00d4d4]/10 text-[#8a9ab0] hover:text-[#00d4d4] transition-all border border-white/5 hover:border-[#00d4d4]/30 z-20 group"
+                                    title="Back to login choices"
+                                >
+                                    <ArrowLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
                                 </button>
                                 <LoginForm role={role} key={role} />
                             </motion.div>

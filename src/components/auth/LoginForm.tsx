@@ -45,57 +45,71 @@ export default function LoginForm({ role }: LoginFormProps) {
                 <p className="text-[#8a9ab0] text-sm">Sign in to your account to continue</p>
             </motion.div>
 
-            <form className="space-y-4" onSubmit={(e) => {
+            <form className="space-y-5" onSubmit={(e) => {
                 e.preventDefault();
                 localStorage.setItem("user_role", role);
                 localStorage.setItem("user_email", email);
                 window.location.href = `/${role}/dashboard`;
             }}>
-                <motion.div variants={itemVariants} className="space-y-1.5">
-                    <label className="text-sm font-medium text-[#8a9ab0]">Email Address</label>
+                <motion.div variants={itemVariants} className="relative group">
                     <input
                         type="email"
-                        placeholder="john@example.com"
+                        id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full bg-[#070d14] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-[#8a9ab0]/50 focus:outline-none focus:border-[#00d4d4] focus:ring-1 focus:ring-[#00d4d4] transition-all"
+                        className="block w-full px-4 pt-6 pb-2 text-white bg-[#070d14]/50 hover:bg-[#070d14] border border-white/10 rounded-xl appearance-none focus:outline-none focus:ring-0 focus:border-[#00d4d4] peer transition-all duration-300"
+                        placeholder=" "
                         required
                     />
+                    <label htmlFor="email" className="absolute text-sm text-[#8a9ab0] duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-[#00d4d4] pointer-events-none">
+                        Email Address
+                    </label>
                 </motion.div>
 
-                <motion.div variants={itemVariants} className="space-y-1.5 relative">
-                    <div className="flex items-center justify-between">
-                        <label className="text-sm font-medium text-[#8a9ab0]">Password</label>
-                        <Link href="#" className="text-sm text-[#00d4d4] hover:text-[#00e5e5]">Forgot Password?</Link>
-                    </div>
-                    <div className="relative">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="••••••••"
-                            className="w-full bg-[#070d14] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-[#8a9ab0]/50 focus:outline-none focus:border-[#00d4d4] focus:ring-1 focus:ring-[#00d4d4] transition-all"
-                            required
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8a9ab0] hover:text-white"
-                        >
-                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                        </button>
+                <motion.div variants={itemVariants} className="relative group">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        className="block w-full px-4 pt-6 pb-2 text-white bg-[#070d14]/50 hover:bg-[#070d14] border border-white/10 rounded-xl appearance-none focus:outline-none focus:ring-0 focus:border-[#00d4d4] peer transition-all duration-300 pr-12"
+                        placeholder=" "
+                        required
+                    />
+                    <label htmlFor="password" className="absolute text-sm text-[#8a9ab0] duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-[#00d4d4] pointer-events-none">
+                        Password
+                    </label>
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8a9ab0] hover:text-[#00d4d4] transition-colors"
+                    >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                    <div className="absolute right-0 -bottom-6 text-sm">
+                        <Link href="#" className="text-[#00d4d4] hover:text-[#00e5e5] transition-colors decoration-[#00d4d4]/30 hover:underline underline-offset-4">
+                            Forgot Password?
+                        </Link>
                     </div>
                 </motion.div>
 
-                <motion.label variants={itemVariants} className="flex items-center gap-2 cursor-pointer pb-2">
-                    <input type="checkbox" className="w-4 h-4 rounded border-white/10 bg-[#070d14] accent-[#00d4d4]" />
-                    <span className="text-sm text-[#8a9ab0]">Remember me</span>
-                </motion.label>
+                <motion.div variants={itemVariants} className="pt-4 flex items-center justify-between pb-2">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                        <div className="relative flex items-center justify-center w-5 h-5 rounded border border-white/20 bg-[#070d14] group-hover:border-[#00d4d4]/50 transition-colors">
+                            <input type="checkbox" className="peer absolute opacity-0 w-full h-full cursor-pointer" />
+                            <div className="pointer-events-none peer-checked:bg-[#00d4d4] absolute inset-0 rounded transition-colors" />
+                            <svg className="w-3.5 h-3.5 text-black absolute pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </div>
+                        <span className="text-sm text-[#8a9ab0] group-hover:text-white transition-colors">Remember me</span>
+                    </label>
+                </motion.div>
 
                 <motion.button
                     variants={itemVariants}
                     type="submit"
-                    className="w-full py-3.5 bg-[#00d4d4] hover:bg-[#00e5e5] text-[#070d14] font-sora font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(0,212,212,0.2)] hover:shadow-[0_0_30px_rgba(0,212,212,0.4)]"
+                    className="w-full py-4 bg-[#00d4d4] hover:bg-[#00e5e5] text-[#030712] font-sora font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(0,212,212,0.2)] hover:shadow-[0_0_30px_rgba(0,212,212,0.4)]"
                 >
-                    Log In
+                    Sign In to Dashboard
                 </motion.button>
             </form>
 

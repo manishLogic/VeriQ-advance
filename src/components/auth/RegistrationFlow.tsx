@@ -10,6 +10,18 @@ export default function RegistrationFlow() {
     const [role, setRole] = useState<"candidate" | "recruiter" | null>(null);
     const [showPassword, setShowPassword] = useState(false);
 
+    // Read URL params to see if role was passed from the universal login page
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const passedRole = params.get('role');
+            if (passedRole === 'candidate' || passedRole === 'recruiter') {
+                setRole(passedRole);
+                setStep(2);
+            }
+        }
+    }, []);
+
     // Form Data State
     const [formData, setFormData] = useState({
         fullName: "",
