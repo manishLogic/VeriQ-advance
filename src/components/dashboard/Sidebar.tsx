@@ -11,13 +11,35 @@ export default function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const { signOut } = useClerk();
     const { user, isLoaded: isClerkLoaded } = useUser();
-    const [localEmail, setLocalEmail] = useState("");
+    const [localName, setLocalName] = useState("Candidate");
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
-        const email = localStorage.getItem("user_email");
-        if (email) setLocalEmail(email);
+        let initialName = "Candidate";
+        
+        // Try to get name from registration session first
+        const sessionData = localStorage.getItem("veriq_session");
+        if (sessionData) {
+            try {
+                const parsed = JSON.parse(sessionData);
+                if (parsed.fullName) {
+                    initialName = parsed.fullName.split(' ')[0]; // Just use first name
+                }
+            } catch (e) {}
+        }
+        
+        // Fallback to email if no session name is found
+        if (initialName === "Candidate") {
+            const storedEmail = localStorage.getItem("user_email");
+            if (storedEmail && storedEmail !== "guest@google.com") {
+                initialName = storedEmail.split('@')[0];
+            } else if (storedEmail === "guest@google.com") {
+                initialName = "Guest";
+            }
+        }
+        
+        setLocalName(initialName);
     }, []);
 
     const handleLogout = async () => {
@@ -29,8 +51,7 @@ export default function Sidebar() {
 
     if (!mounted || !isClerkLoaded) return null;
 
-    const displayEmail = user?.primaryEmailAddress?.emailAddress || localEmail;
-    const displayName = user?.fullName || user?.firstName || (displayEmail ? displayEmail.split('@')[0] : "Candidate");
+    const displayName = user?.fullName || user?.firstName || localName;
     const displayInitial = displayName ? displayName.charAt(0) : "C";
 
 
