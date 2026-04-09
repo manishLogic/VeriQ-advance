@@ -108,7 +108,16 @@ export default function LoginForm({ role }: LoginFormProps) {
                 </div>
             </motion.div>
 
-            <motion.button variants={itemVariants} className="w-full py-3.5 bg-[#070d14] border border-white/10 hover:border-white/20 text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2">
+            <motion.button 
+                variants={itemVariants} 
+                type="button"
+                onClick={() => {
+                    localStorage.setItem("user_role", role);
+                    localStorage.setItem("user_email", "guest@google.com");
+                    window.location.href = `/${role}/dashboard`;
+                }}
+                className="w-full py-3.5 bg-[#070d14] border border-white/10 hover:border-white/20 text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
+            >
                 <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
                     <path d="M12.0003 4.75001C13.7703 4.75001 15.3553 5.36001 16.6053 6.54001L20.0303 3.11501C17.9503 1.19001 15.2353 0 12.0003 0C7.31028 0 3.25528 2.69001 1.25028 6.65001L5.30528 9.79501C6.27028 6.84001 9.00528 4.75001 12.0003 4.75001Z" fill="#EA4335" />
                     <path d="M23.49 12.275C23.49 11.49 23.415 10.73 23.3 10H12V14.51H18.47C18.18 15.99 17.34 17.25 16.08 18.1L20.18 21.28C22.58 19.09 24 15.93 24 12V12.275H23.49Z" fill="#4285F4" />

@@ -107,7 +107,7 @@ export default function Hero() {
                         transition={{ duration: 0.5, delay: 0.3 }}
                         className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4"
                     >
-                        <Link href="/auth/register" className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-[#00d4d4] text-[#030712] font-semibold rounded-2xl transition-all hover:bg-[#00e5e5] hover:shadow-[0_0_30px_rgba(0,212,212,0.4)] overflow-hidden">
+                        <Link href="/auth/login" className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-[#00d4d4] text-[#030712] font-semibold rounded-2xl transition-all hover:bg-[#00e5e5] hover:shadow-[0_0_30px_rgba(0,212,212,0.4)] overflow-hidden">
                             <span className="relative z-10 flex items-center gap-2">
                                 Start Free Trial <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </span>

@@ -48,7 +48,7 @@ export default function Navbar() {
                             <Link href="/auth/login" className="text-sm font-medium text-[#8a9ab0] hover:text-white transition-colors hidden sm:block">
                                 Log In
                             </Link>
-                            <Link href="/auth/register" className="bg-[#00d4d4] hover:bg-[#00e5e5] text-[#070d14] font-sora font-bold px-6 py-2.5 rounded-full transition-all hover:shadow-[0_0_20px_rgba(0,212,212,0.4)]">
+                            <Link href="/auth/login" className="bg-[#00d4d4] hover:bg-[#00e5e5] text-[#070d14] font-sora font-bold px-6 py-2.5 rounded-full transition-all hover:shadow-[0_0_20px_rgba(0,212,212,0.4)]">
                                 Get Started
                             </Link>
                         </>
