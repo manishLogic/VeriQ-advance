@@ -6,6 +6,7 @@ import { RippleButton } from "@/components/shared/RippleButton";
 
 export default function PricingPreview() {
     const [isAnnual, setIsAnnual] = useState(true);
+    const [showFeatures, setShowFeatures] = useState(false);
 
     // Modal & Payment State
     const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -281,10 +282,73 @@ export default function PricingPreview() {
                 </div>
 
                 <div className="mt-16 text-center">
-                    <button className="text-sm font-medium text-[#00d4d4] hover:text-white transition-colors underline underline-offset-4 decoration-white/20 hover:decoration-[#00d4d4]">
-                        Compare all plan features
+                    <button 
+                        onClick={() => setShowFeatures(!showFeatures)}
+                        className="text-sm font-medium text-[#00d4d4] hover:text-white transition-colors underline underline-offset-4 decoration-white/20 hover:decoration-[#00d4d4] flex items-center justify-center gap-2 mx-auto"
+                    >
+                        {showFeatures ? 'Hide plan features' : 'Compare all plan features'}
+                        <motion.div animate={{ rotate: showFeatures ? 180 : 0 }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </motion.div>
                     </button>
                 </div>
+
+                <AnimatePresence>
+                    {showFeatures && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                            className="overflow-hidden max-w-4xl mx-auto mt-12"
+                        >
+                            <div className="bg-[#0d1722] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left min-w-[600px]">
+                                        <thead>
+                                            <tr className="border-b border-white/10 bg-white/5">
+                                                <th className="p-6 text-[#8a9ab0] font-medium w-1/3">Feature</th>
+                                                <th className="p-6 text-white font-semibold w-[22%] text-center">Starter</th>
+                                                <th className="p-6 text-[#00d4d4] font-semibold w-[22%] text-center border-l border-r border-[#00d4d4]/20 bg-[#00d4d4]/5">Pro</th>
+                                                <th className="p-6 text-white font-semibold w-[22%] text-center">Enterprise</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/5 text-sm">
+                                            {[
+                                                { label: "Candidate Limits", starter: "Up to 10/mo", pro: "Unlimited", enterprise: "Unlimited" },
+                                                { label: "Resume Parsing", starter: "Basic extraction", pro: "Advanced AI insights", enterprise: "Custom Tuned AI" },
+                                                { label: "Anti-Cheat Proctoring", starter: false, pro: true, enterprise: true },
+                                                { label: "Behavioral Risk Scoring", starter: false, pro: true, enterprise: "Custom thresholds" },
+                                                { label: "Custom Skill Tests", starter: false, pro: "10 per role", enterprise: "Unlimited via API" },
+                                                { label: "Support Level", starter: "Email only", pro: "Priority 24/7", enterprise: "Dedicated Slack channel" },
+                                                { label: "ATS Integrations", starter: false, pro: false, enterprise: "Full Suite & API" }
+                                            ].map((row, i) => (
+                                                <tr key={i} className="hover:bg-white/[0.02] transition-colors">
+                                                    <td className="p-6 text-white">{row.label}</td>
+                                                    <td className="p-6 text-center text-[#8a9ab0]">
+                                                        {typeof row.starter === 'boolean' 
+                                                            ? (row.starter ? <CheckCircle2 size={18} className="mx-auto text-white" /> : <span className="text-white/20">-</span>)
+                                                            : row.starter}
+                                                    </td>
+                                                    <td className="p-6 text-center bg-[#00d4d4]/5 border-l border-r border-[#00d4d4]/20 font-medium text-white">
+                                                        {typeof row.pro === 'boolean'
+                                                            ? (row.pro ? <CheckCircle2 size={18} className="mx-auto text-[#00d4d4]" /> : <span className="text-white/20">-</span>)
+                                                            : <span className="text-[#00d4d4]">{row.pro}</span>}
+                                                    </td>
+                                                    <td className="p-6 text-center text-[#8a9ab0]">
+                                                        {typeof row.enterprise === 'boolean'
+                                                            ? (row.enterprise ? <CheckCircle2 size={18} className="mx-auto text-white" /> : <span className="text-white/20">-</span>)
+                                                            : row.enterprise}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
             </div>
         </section>
