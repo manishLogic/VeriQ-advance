@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Bell, Shield, Key, Loader2, Check } from "lucide-react";
 
 export default function CandidateSettings() {
@@ -8,12 +8,51 @@ export default function CandidateSettings() {
     const [isSaving, setIsSaving] = useState<string | null>(null);
     const [savedSection, setSavedSection] = useState<string | null>(null);
 
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+
+    useEffect(() => {
+        let fullName = "Candidate";
+        let storedEmail = localStorage.getItem("user_email") || "guest@google.com";
+
+        const sessionData = localStorage.getItem("veriq_session");
+        if (sessionData) {
+            try {
+                const parsed = JSON.parse(sessionData);
+                if (parsed.fullName) fullName = parsed.fullName;
+                if (parsed.email) storedEmail = parsed.email;
+            } catch (e) {}
+        }
+
+        if (fullName === "Candidate" && storedEmail !== "guest@google.com") {
+            fullName = storedEmail.split('@')[0];
+        }
+
+        const nameParts = fullName.split(' ');
+        setFirstName(nameParts[0] || "Candidate");
+        setLastName(nameParts.slice(1).join(' ') || "");
+        setEmail(storedEmail);
+    }, []);
+
     const handleSave = (section: string) => {
         setIsSaving(section);
         setTimeout(() => {
             setIsSaving(null);
             setSavedSection(section);
             setTimeout(() => setSavedSection(null), 2000);
+            
+            // Optionally save back to local storage if it's the profile
+            if (section === "profile") {
+                const sessionData = localStorage.getItem("veriq_session");
+                if (sessionData) {
+                    try {
+                        const parsed = JSON.parse(sessionData);
+                        parsed.fullName = `${firstName} ${lastName}`.trim();
+                        localStorage.setItem("veriq_session", JSON.stringify(parsed));
+                    } catch (e) {}
+                }
+            }
         }, 1200);
     };
 
@@ -71,15 +110,15 @@ export default function CandidateSettings() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-sm text-[#8a9ab0]">First Name</label>
-                                    <input type="text" className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00d4d4]/50 transition-colors" defaultValue="Jane" />
+                                    <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00d4d4]/50 transition-colors" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm text-[#8a9ab0]">Last Name</label>
-                                    <input type="text" className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00d4d4]/50 transition-colors" defaultValue="Doe" />
+                                    <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00d4d4]/50 transition-colors" />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
                                     <label className="text-sm text-[#8a9ab0]">Email Address</label>
-                                    <input type="email" className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-[#54647a] cursor-not-allowed" value="jane.doe@example.com" disabled />
+                                    <input type="email" className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-[#54647a] cursor-not-allowed" value={email} disabled />
                                     <p className="text-xs text-[#54647a] mt-1">To change your email, please contact support.</p>
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
