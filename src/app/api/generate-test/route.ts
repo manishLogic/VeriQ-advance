@@ -20,15 +20,19 @@ export async function POST(req: NextRequest) {
         const genAI = new GoogleGenerativeAI(apiKey);
         
         // Use gemini-1.5-flash and strict JSON mode
-        // Use gemini-pro to guarantee compatibility with older @google/generative-ai v0.x SDKs
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-flash",
+            generationConfig: {
+                responseMimeType: "application/json"
+            }
+        });
         
         const prompt = `
 You are an expert technical interviewer and software engineering examiner.
 I need to test a candidate on their knowledge of this specific skill: "${skill}".
 
-Generate exactly 10 multiple-choice questions (MCQs) to accurately test their proficiency in this skill.
-Make the questions range from intermediate to advanced difficulty.
+CRITICAL INSTRUCTION 1: Generate exactly 10 multiple-choice questions (MCQs) EXCLUSIVELY about ${skill}. Do not ask general programming or logic questions unless they are specifically tailored to ${skill}.
+CRITICAL INSTRUCTION 2: Make the questions range from intermediate to advanced difficulty.
 Each question should be practical and anti-cheat (hard to just drop into a search engine).
 
 CRITICAL INSTRUCTION: You MUST return the output ONLY as a raw, valid JSON array. 
