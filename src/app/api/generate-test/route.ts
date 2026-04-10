@@ -19,13 +19,7 @@ export async function POST(req: NextRequest) {
 
         const genAI = new GoogleGenerativeAI(apiKey);
         
-        // Use gemini-2.5-flash and strict JSON mode
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash",
-            generationConfig: {
-                responseMimeType: "application/json"
-            }
-        });
+
         
         const prompt = `
 You are an expert technical interviewer and software engineering examiner.
@@ -47,7 +41,47 @@ The JSON array MUST exactly follow this schema:
 ]
         `;
 
-        const result = await model.generateContent(prompt);
+        // Retry logic with fallback models for 503 Overloaded errors
+        let result = null;
+        let lastError = null;
+        const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemma-2-27b-it"];
+        
+        for (const modelName of modelsToTry) {
+            try {
+                const currentModel = genAI.getGenerativeModel({ 
+                    model: modelName,
+                    generationConfig: { responseMimeType: "application/json" }
+                });
+                
+                // Try up to 2 times per model
+                for (let attempt = 1; attempt <= 2; attempt++) {
+                    try {
+                        result = await currentModel.generateContent(prompt);
+                        if (result) break;
+                    } catch (e: any) {
+                        lastError = e;
+                        if (e.message?.includes("503") || e.status === 503) {
+                            console.log(`[Attempt ${attempt}] ${modelName} heavily loaded (503). Retrying in 2 seconds...`);
+                            await new Promise(r => setTimeout(r, 2000));
+                        } else {
+                            throw e; // Break inner loop if it's not a 503
+                        }
+                    }
+                }
+                
+                if (result) break; // Break outer loop if we got a valid result
+            } catch (fallbackError) {
+                // If the model fails completely (e.g. 404), move to the next fallback model
+                console.warn(`Model ${modelName} failed, falling back to next available model...`);
+                lastError = fallbackError;
+            }
+        }
+        
+        if (!result) {
+            console.error("All Gemini models and retries failed:", lastError);
+            return NextResponse.json({ error: "Google AI Servers are currently experiencing extreme demand. Please try again in a few seconds." }, { status: 503 });
+        }
+
         const responseText = result.response.text().trim();
         
         let questions = [];
