@@ -44,13 +44,18 @@ The JSON array MUST exactly follow this schema:
         // Retry logic with fallback models for 503 Overloaded errors
         let result = null;
         let lastError = null;
-        const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemma-2-27b-it"];
+        const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemma-2-27b-it", "gemma-3-4b-it"];
         
         for (const modelName of modelsToTry) {
             try {
+                const config: any = {};
+                if (!modelName.startsWith("gemma")) {
+                    config.responseMimeType = "application/json";
+                }
+
                 const currentModel = genAI.getGenerativeModel({ 
                     model: modelName,
-                    generationConfig: { responseMimeType: "application/json" }
+                    generationConfig: config
                 });
                 
                 // Try up to 2 times per model
