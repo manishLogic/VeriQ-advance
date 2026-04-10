@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Always fallback to the provided process env, but inject the user key as fallback for immediate action
-        const apiKey = process.env.GEMINI_API_KEY || "AIzaSyDCgNckndJm0GqMhaP8l1obaeXE3WF38fc";
+        const apiKey = process.env.GEMINI_API_KEY || "AIzaSyC_R-l7AWT6zGsVe9mie4iHpWO2DzK_vtk";
         
         if (!process.env.GEMINI_API_KEY && !apiKey) {
              return NextResponse.json({ error: "Gemini API Key not configured" }, { status: 500 });
