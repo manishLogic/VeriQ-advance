@@ -5,7 +5,6 @@ import HowItWorks from "@/components/landing/HowItWorks";
 import Features from "@/components/landing/Features";
 import PricingPreview from "@/components/landing/PricingPreview";
 import InsightsCTA from "@/components/landing/InsightsCTA";
-import ChatFAB from "@/components/landing/ChatFAB";
 import Footer from "@/components/landing/Footer";
 
 export default function Home() {
@@ -19,7 +18,6 @@ export default function Home() {
       <PricingPreview />
       <InsightsCTA />
       <Footer />
-      <ChatFAB />
     </main>
   );
 }
