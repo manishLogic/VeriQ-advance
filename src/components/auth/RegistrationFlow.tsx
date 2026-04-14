@@ -65,6 +65,10 @@ export default function RegistrationFlow() {
             };
 
             localStorage.setItem("veriq_session", JSON.stringify(userData));
+            
+            // Set standard global variables used by Sidebar and dashboards
+            if (role) localStorage.setItem("user_role", role);
+            if (formData.email) localStorage.setItem("user_email", formData.email);
 
             // Generate mock records based on role
             if (role === "recruiter") {
