@@ -10,11 +10,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Skill is required" }, { status: 400 });
         }
 
-        // Always fallback to the provided process env, but inject the user key as fallback for immediate action
-        const apiKey = process.env.GEMINI_API_KEY || "AIzaSyC_R-l7AWT6zGsVe9mie4iHpWO2DzK_vtk";
+        // Use strict environment lookup (remove hardcoded keys to prevent GitHub Secret Scanning blocks)
+        const apiKey = process.env.GEMINI_API_KEY;
         
-        if (!process.env.GEMINI_API_KEY && !apiKey) {
-             return NextResponse.json({ error: "Gemini API Key not configured" }, { status: 500 });
+        if (!apiKey) {
+             return NextResponse.json({ error: "Gemini API Key is missing in Vercel Environment Variables." }, { status: 500 });
         }
 
         const genAI = new GoogleGenerativeAI(apiKey);
