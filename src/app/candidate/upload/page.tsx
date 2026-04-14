@@ -55,8 +55,7 @@ export default function ResumeUpload() {
             clearInterval(interval);
             setProgress(100);
             setIsUploading(false);
-            setUploadError("Network Error or API Issue connecting to the AI.");
-            // DO NOT set isComplete to true, otherwise it renders a fake success screen!
+            setUploadError(error.message ? `Client Error: ${error.message}` : "Network Error or API Issue connecting to the server.");
         }
     };
 
