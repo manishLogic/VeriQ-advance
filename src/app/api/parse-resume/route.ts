@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import * as pdfParseModule from "pdf-parse";
 const pdfParse = (pdfParseModule as any).default || pdfParseModule;
 
@@ -20,7 +19,6 @@ export async function POST(req: NextRequest) {
 
         const buffer = Buffer.from(await file.arrayBuffer());
         
-        // Extract text from PDF
         let pdfData;
         try {
             pdfData = await pdfParse(buffer);
@@ -48,6 +46,7 @@ export async function POST(req: NextRequest) {
         ];
 
         let extractedSkills: string[] = [];
+        // Add padding to ensure exact word matches
         const cleanText = " " + text.toLowerCase().replace(/[^a-z0-9+#.\-]/g, ' ') + " ";
 
         extractedSkills = KNOWN_SKILLS.filter(skill => {
