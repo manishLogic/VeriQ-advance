@@ -14,13 +14,34 @@ export default function CandidateDashboard() {
 
     useEffect(() => {
         setMounted(true);
-        const storedEmail = localStorage.getItem("user_email");
-        if (storedEmail) {
-            setLocalName(storedEmail.split('@')[0]);
+        
+        let initialName = "Candidate";
+        
+        // Try to get name from registration session first
+        const sessionData = localStorage.getItem("veriq_session");
+        if (sessionData) {
+            try {
+                const parsed = JSON.parse(sessionData);
+                if (parsed.fullName) {
+                    initialName = parsed.fullName.split(' ')[0]; // Just use first name
+                }
+            } catch (e) {}
         }
         
-        const skills = localStorage.getItem("veriq_skills");
-        if (skills && JSON.parse(skills).length > 0) {
+        // Fallback to email if no session name is found
+        if (initialName === "Candidate") {
+            const storedEmail = localStorage.getItem("user_email");
+            if (storedEmail && storedEmail !== "guest@google.com") {
+                initialName = storedEmail.split('@')[0];
+            } else if (storedEmail === "guest@google.com") {
+                initialName = "Guest";
+            }
+        }
+        
+        setLocalName(initialName);
+        
+        const skillsObj = localStorage.getItem("veriq_skills");
+        if (skillsObj && JSON.parse(skillsObj).length > 0) {
             setHasSkills(true);
         }
     }, []);
