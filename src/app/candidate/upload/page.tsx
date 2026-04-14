@@ -41,11 +41,10 @@ export default function ResumeUpload() {
             
             if (data.skills && Array.isArray(data.skills)) {
                 setExtractedSkills(data.skills);
-                localStorage.setItem("extractedSkills", JSON.stringify(data.skills));
+                localStorage.setItem("veriq_skills", JSON.stringify(data.skills));
             } else {
-                const fallback = ["Communication", "Problem Solving", "Adaptability"];
-                setExtractedSkills(fallback);
-                localStorage.setItem("extractedSkills", JSON.stringify(fallback));
+                setExtractedSkills([]);
+                localStorage.setItem("veriq_skills", JSON.stringify([]));
             }
             
             setTimeout(() => setIsComplete(true), 500);
