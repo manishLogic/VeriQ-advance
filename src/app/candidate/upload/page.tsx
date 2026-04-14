@@ -7,6 +7,7 @@ export default function ResumeUpload() {
     const [progress, setProgress] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
     const [extractedSkills, setExtractedSkills] = useState<string[]>([]);
+    const [uploadError, setUploadError] = useState<string | null>(null);
 
     const simulateUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) return;
@@ -14,6 +15,7 @@ export default function ResumeUpload() {
         const file = e.target.files[0];
         setIsUploading(true);
         setProgress(0);
+        setUploadError(null);
         
         let current = 0;
         const interval = setInterval(() => {
@@ -39,21 +41,21 @@ export default function ResumeUpload() {
             clearInterval(interval);
             setProgress(100);
             
-            if (data.skills && Array.isArray(data.skills)) {
+            if (data.skills && Array.isArray(data.skills) && data.skills.length > 0) {
                 setExtractedSkills(data.skills);
                 localStorage.setItem("veriq_skills", JSON.stringify(data.skills));
+                setTimeout(() => setIsComplete(true), 500);
             } else {
                 setExtractedSkills([]);
-                localStorage.setItem("veriq_skills", JSON.stringify([]));
+                setIsUploading(false);
+                setUploadError(data.error || "No technical skills could be detected on your resume. Please ensure they are clearly written, or try another file.");
             }
-            
-            setTimeout(() => setIsComplete(true), 500);
         } catch (error: any) {
             console.error("Upload failed", error);
             clearInterval(interval);
             setProgress(100);
             setIsUploading(false);
-            setExtractedSkills(["Network Error or API Issue"]);
+            setUploadError("Network Error or API Issue connecting to the AI.");
             // DO NOT set isComplete to true, otherwise it renders a fake success screen!
         }
     };
@@ -101,6 +103,11 @@ export default function ResumeUpload() {
                         </div>
                     ) : (
                         <>
+                            {uploadError && (
+                                <div className="mb-6 px-4 py-3 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-sm font-medium">
+                                    {uploadError}
+                                </div>
+                            )}
                             <h3 className="text-2xl font-sora font-semibold text-white mb-2">Drag and drop your PDF here</h3>
                             <p className="text-[#8a9ab0]">or click anywhere to browse your files</p>
                             <div className="mt-8">
