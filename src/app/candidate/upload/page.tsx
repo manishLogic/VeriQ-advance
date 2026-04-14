@@ -83,7 +83,7 @@ export default function ResumeUpload() {
                         type="file"
                         id="resume-upload"
                         className="hidden"
-                        accept=".pdf,.doc,.docx"
+                        accept=".pdf"
                         onChange={simulateUpload}
                     />
                     <div className="w-20 h-20 mx-auto rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#00d4d4]/10 transition-colors">

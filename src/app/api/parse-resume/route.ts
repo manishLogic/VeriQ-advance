@@ -19,10 +19,20 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No file provided" }, { status: 400 });
         }
 
+        if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+            return NextResponse.json({ error: "Invalid file type. Only PDF resumes are supported." }, { status: 400 });
+        }
+
         const buffer = Buffer.from(await file.arrayBuffer());
         
         // Extract text from PDF
-        const pdfData = await pdfParse(buffer);
+        let pdfData;
+        try {
+            pdfData = await pdfParse(buffer);
+        } catch (pdfError) {
+            console.error("PDF Parsing error:", pdfError);
+            return NextResponse.json({ error: "Could not read this PDF. It may be corrupted or encrypted. Please try a different PDF." }, { status: 400 });
+        }
         const text = pdfData.text;
 
         if (!text || text.trim().length === 0) {
