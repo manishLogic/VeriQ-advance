@@ -1,9 +1,74 @@
 "use client";
-import { ShieldCheck, Share2, Download, CheckCircle2, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ShieldCheck, Share2, Download, CheckCircle2, ChevronRight, XCircle, Clock } from "lucide-react";
 import { GlowCard } from "@/components/shared/GlowCard";
 
 export default function TrustScore() {
-    const score = 87;
+    const [score, setScore] = useState<number>(0);
+    const [testsTakenCount, setTestsTakenCount] = useState<number>(0);
+    const [metrics, setMetrics] = useState<any[]>([
+        { label: "Resume Authenticity", value: 0, desc: "AI timeline cross-referencing and claim validation." },
+        { label: "Skill Accuracy (Tests)", value: 0, desc: "Average score across technical timed modules." },
+        { label: "Profile Completeness", value: 0, desc: "All required documentation and history provided." }
+    ]);
+    const [verifiedSkills, setVerifiedSkills] = useState<{name: string, status: string}[]>([]);
+
+    useEffect(() => {
+        const storedSkillsStr = localStorage.getItem("veriq_skills");
+        const storedResultsStr = localStorage.getItem("veriq_test_results");
+        
+        let pendingSkills: string[] = [];
+        if (storedSkillsStr) {
+             try { pendingSkills = JSON.parse(storedSkillsStr); } catch (e) {}
+        }
+        
+        let testResults: Record<string, any> = {};
+        if (storedResultsStr) {
+             try { testResults = JSON.parse(storedResultsStr); } catch (e) {}
+        }
+
+        const hasResume = pendingSkills.length > 0 || Object.keys(testResults).length > 0;
+        let testsTaken = Object.keys(testResults).length;
+        setTestsTakenCount(testsTaken);
+        
+        let totalTestScore = 0;
+        let testAccuracy = 0;
+        const dynamicVerifiedSkills: {name: string, status: string}[] = [];
+        
+        if (hasResume) {
+            // Check every skill we have extracted
+            pendingSkills.forEach(skill => {
+                if (testResults[skill]) {
+                    const pass = testResults[skill].passed;
+                    dynamicVerifiedSkills.push({ name: skill, status: pass ? "Passed" : "Failed" });
+                    totalTestScore += (testResults[skill].score / testResults[skill].total) * 100;
+                } else {
+                    dynamicVerifiedSkills.push({ name: skill, status: "Pending" });
+                }
+            });
+            
+            if (testsTaken > 0) {
+                testAccuracy = Math.round(totalTestScore / testsTaken);
+            }
+            
+            // Score Algorithm: 30 base points for resume + 70 points scaling on test accuracy
+            let finalTrustScore = 30; // base resume points
+            if (testsTaken > 0) {
+                finalTrustScore += Math.round((testAccuracy / 100) * 70); 
+            } else {
+                finalTrustScore = 30; // 30 points if no tests taken yet
+            }
+            
+            setScore(finalTrustScore);
+            setMetrics([
+                { label: "Resume Authenticity", value: 94, desc: "AI timeline cross-referencing and claim validation." },
+                { label: "Skill Accuracy (Tests)", value: testAccuracy, desc: "Average score across technical timed modules." },
+                { label: "Profile Completeness", value: 100, desc: "All required documentation and history provided." }
+            ]);
+        }
+        
+        setVerifiedSkills(dynamicVerifiedSkills);
+    }, []);
 
     // SVG math
     const radius = 90;
@@ -15,7 +80,7 @@ export default function TrustScore() {
 
             <header className="space-y-4 text-center">
                 <h1 className="text-3xl md:text-4xl font-sora font-bold text-white">Your VeriQ Trust Score</h1>
-                <p className="text-[#8a9ab0] max-w-2xl mx-auto">This score represents your verified profile authenticity and technical capability, calculated by AI and timed MCQ tests.</p>
+                <p className="text-[#8a9ab0] max-w-2xl mx-auto">This score represents your verified profile authenticity and technical capability, directly calculated from your timed MCQ tests.</p>
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -39,16 +104,18 @@ export default function TrustScore() {
                         </svg>
                         <div className="relative z-10 flex flex-col items-center">
                             <span className="text-6xl font-sora font-bold text-white">{score}</span>
-                            <span className="text-[#00d4d4] font-medium tracking-widest text-sm uppercase">Excellent</span>
+                            <span className="text-[#00d4d4] font-medium tracking-widest text-sm uppercase">
+                                {score > 80 ? "Excellent" : score > 50 ? "Verified" : score > 0 ? "Pending" : "New User"}
+                            </span>
                         </div>
                     </div>
 
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-400 rounded-full border border-green-500/20 text-sm font-semibold mb-6">
-                        <ShieldCheck size={16} /> Top 15% of Candidates
+                        <ShieldCheck size={16} /> Authenticity Proven
                     </div>
 
                     <p className="text-[#8a9ab0] text-sm leading-relaxed mb-8">
-                        Verified on Feb 25, 2026. This score is mathematically backed by your verified work history and 4 technical assessments.
+                        This score is mathematically backed by your verified work history and {testsTakenCount} rigorous technical assessments.
                     </p>
 
                     <div className="w-full flex gap-3">
@@ -66,11 +133,7 @@ export default function TrustScore() {
                     <h2 className="text-2xl font-sora font-semibold text-white mb-6">Score Breakdown</h2>
 
                     <div className="space-y-8">
-                        {[
-                            { label: "Resume Authenticity", value: 94, desc: "AI timeline cross-referencing and claim validation." },
-                            { label: "Skill Accuracy (Tests)", value: 82, desc: "Average score across technical timed modules." },
-                            { label: "Profile Completeness", value: 100, desc: "All required documentation and history provided." }
-                        ].map((metric, idx) => (
+                        {metrics.map((metric, idx) => (
                             <div key={idx} className="space-y-3">
                                 <div className="flex justify-between items-end">
                                     <div>
@@ -81,7 +144,7 @@ export default function TrustScore() {
                                 </div>
                                 <div className="h-2 w-full bg-[#0d1722] rounded-full overflow-hidden border border-white/5">
                                     <div
-                                        className="h-full bg-gradient-to-r from-cyan-500 to-[#00d4d4]"
+                                        className="h-full bg-gradient-to-r from-cyan-500 to-[#00d4d4] transition-all duration-1000"
                                         style={{ width: `${metric.value}%` }}
                                     />
                                 </div>
@@ -91,19 +154,37 @@ export default function TrustScore() {
 
                     <div className="mt-10 p-6 bg-[#0d1722] border border-white/5 rounded-2xl">
                         <h3 className="text-white font-medium mb-4">Verified Technical Skills</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {["React (Passed)", "TypeScript (Passed)", "Next.js (Passed)", "Node.js (Pending)"].map((skill, i) => {
-                                const isPassed = skill.includes("Passed");
-                                return (
-                                    <div key={i} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border ${isPassed ? "bg-green-500/10 border-green-500/30 text-green-400" : "bg-white/5 border-white/10 text-[#8a9ab0]"
-                                        }`}>
-                                        {isPassed && <CheckCircle2 size={14} />}
-                                        {skill.replace(/ \(.+\)/, "")}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <button className="mt-6 flex items-center gap-2 text-[#00d4d4] text-sm font-medium hover:text-[#00e5e5] transition-colors rounded-xl p-2 hover:bg-white/5 -ml-2">
+                        
+                        {verifiedSkills.length === 0 ? (
+                            <p className="text-[#8a9ab0] text-sm italic">Upload your resume to extract and verify your skills.</p>
+                        ) : (
+                            <div className="flex flex-wrap gap-2">
+                                {verifiedSkills.map((skill, i) => {
+                                    let bgClass = "bg-white/5 border-white/10 text-[#8a9ab0]";
+                                    let Icon = Clock;
+                                    
+                                    if (skill.status === "Passed") {
+                                        bgClass = "bg-green-500/10 border-green-500/30 text-green-400";
+                                        Icon = CheckCircle2;
+                                    } else if (skill.status === "Failed") {
+                                        bgClass = "bg-red-500/10 border-red-500/30 text-red-400";
+                                        Icon = XCircle;
+                                    }
+                                    
+                                    return (
+                                        <div key={i} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border ${bgClass}`}>
+                                            <Icon size={14} />
+                                            {skill.name} ({skill.status === "Passed" ? "Test Done" : skill.status})
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                        
+                        <button 
+                            onClick={() => window.location.href = '/candidate/skill-test'}
+                            className="mt-6 flex items-center gap-2 text-[#00d4d4] text-sm font-medium hover:text-[#00e5e5] transition-colors rounded-xl p-2 hover:bg-white/5 -ml-2"
+                        >
                             Take pending skill tests to improve score <ChevronRight size={16} />
                         </button>
                     </div>

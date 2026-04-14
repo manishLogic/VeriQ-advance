@@ -26,20 +26,45 @@ export default function SkillTest() {
 
     useEffect(() => {
         const stored = localStorage.getItem("veriq_skills");
+        const storedResultsStr = localStorage.getItem("veriq_test_results");
+        const parsedResults = storedResultsStr ? JSON.parse(storedResultsStr) : {};
+
         if (stored) {
             try {
                 const skills = JSON.parse(stored);
                 if (Array.isArray(skills) && skills.length > 0) {
-                    setPendingTests(skills.map((skill: string, index: number) => ({
-                        id: index + 1,
-                        name: `${skill} Assessment`,
-                        qs: 10,
-                        time: "10s/q"
-                    })));
+                    const pending = skills
+                        .filter((skill: string) => !parsedResults[skill])
+                        .map((skill: string, index: number) => ({
+                            id: index + 1,
+                            name: `${skill} Assessment`,
+                            qs: 10,
+                            time: "10s/q"
+                        }));
+                    setPendingTests(pending);
                 }
             } catch (e) {}
         }
-    }, []);
+    }, [testState]);
+
+    // Save result to localStorage when completing a test
+    useEffect(() => {
+        if (testState === "result") {
+            try {
+                const storedResultsStr = localStorage.getItem("veriq_test_results");
+                const parsedResults = storedResultsStr ? JSON.parse(storedResultsStr) : {};
+                const skillName = activeTest.replace(" Assessment", "");
+                
+                parsedResults[skillName] = {
+                    score: score,
+                    total: questions.length,
+                    passed: score >= (questions.length * 0.7)
+                };
+                
+                localStorage.setItem("veriq_test_results", JSON.stringify(parsedResults));
+            } catch(e) {}
+        }
+    }, [testState, activeTest, score, questions.length]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
