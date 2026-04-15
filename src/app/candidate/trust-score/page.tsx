@@ -65,6 +65,27 @@ export default function TrustScore() {
                 { label: "Skill Accuracy (Tests)", value: testAccuracy, desc: "Average score across technical timed modules." },
                 { label: "Profile Completeness", value: 100, desc: "All required documentation and history provided." }
             ]);
+
+            // MAGIC DEMO LINK: Automatically push this live candidate to the Recruiter Dashboard
+            try {
+                const storedMock = localStorage.getItem("veriq_mock_candidates") || "[]";
+                const mockList = JSON.parse(storedMock);
+                
+                // Add or update the "Live Candidate"
+                const liveCandidate = {
+                    id: "live-demo-user",
+                    name: "Live Demo Candidate",
+                    role: "Software Engineer",
+                    score: finalTrustScore,
+                    skills: pendingSkills.slice(0, 3)
+                };
+                
+                // remove existing live candidate if they took the test again to prevent duplicates
+                const filtered = mockList.filter((m: any) => m.id !== "live-demo-user");
+                filtered.unshift(liveCandidate);
+                
+                localStorage.setItem("veriq_mock_candidates", JSON.stringify(filtered));
+            } catch (err) {}
         }
         
         setVerifiedSkills(dynamicVerifiedSkills);
