@@ -14,12 +14,18 @@ export default function RecruiterDashboard() {
     const router = useRouter();
     const [candidates, setCandidates] = useState(FALLBACK_CANDIDATES);
     const [isLoading, setIsLoading] = useState(true);
+    const [companyName, setCompanyName] = useState("Acme Corp");
 
     useEffect(() => {
         const role = localStorage.getItem("user_role");
         if (role !== "recruiter") {
             router.push("/");
             return;
+        }
+
+        const storedCompany = localStorage.getItem("veriq_company_name");
+        if (storedCompany) {
+            setCompanyName(storedCompany);
         }
 
         setTimeout(() => {
@@ -47,7 +53,7 @@ export default function RecruiterDashboard() {
         <div className="p-8 md:p-12 max-w-6xl mx-auto space-y-10 animate-in fade-in duration-500">
             <header className="space-y-2 relative">
                 <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#00d4d4]/10 rounded-full blur-[50px] pointer-events-none" />
-                <h1 className="text-3xl font-sora font-bold text-white relative z-10">Acme Corp Pipeline</h1>
+                <h1 className="text-3xl font-sora font-bold text-white relative z-10">{companyName} Pipeline</h1>
                 <p className="text-[#8a9ab0] relative z-10">Overview of your currently verified and pending candidates.</p>
             </header>
 

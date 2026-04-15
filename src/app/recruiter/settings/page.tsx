@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Bell, Briefcase, CreditCard, Users, Loader2, Check, X, ShieldCheck } from "lucide-react";
 
 export default function RecruiterSettings() {
@@ -8,6 +8,12 @@ export default function RecruiterSettings() {
     const [isSaving, setIsSaving] = useState<string | null>(null);
     const [savedSection, setSavedSection] = useState<string | null>(null);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [companyName, setCompanyName] = useState("Acme Corp");
+
+    useEffect(() => {
+        const stored = localStorage.getItem("veriq_company_name");
+        if (stored) setCompanyName(stored);
+    }, []);
 
     // Invite Modal State
     const [showInviteModal, setShowInviteModal] = useState(false);
@@ -46,7 +52,10 @@ export default function RecruiterSettings() {
                 showToast("Cancellation request initiated. Please check your email.");
             } else if (section === "payment") {
                 showToast("Opening secure billing portal...");
-            } else if (section === "company" || section === "account") {
+            } else if (section === "company") {
+                localStorage.setItem("veriq_company_name", companyName);
+                showToast("Company details updated successfully!");
+            } else if (section === "account") {
                 showToast("Profile details updated successfully!");
             }
 
@@ -353,7 +362,12 @@ export default function RecruiterSettings() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2 md:col-span-2">
                                     <label className="text-sm text-[#8a9ab0]">Company Name</label>
-                                    <input type="text" className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00d4d4]/50 transition-colors" defaultValue="Acme Corp" />
+                                    <input 
+                                        type="text" 
+                                        className="w-full bg-[#070d14] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00d4d4]/50 transition-colors" 
+                                        value={companyName}
+                                        onChange={(e) => setCompanyName(e.target.value)}
+                                    />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm text-[#8a9ab0]">Website URL</label>
